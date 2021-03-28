@@ -1,71 +1,39 @@
 <template>
-<el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+  <el-tabs type="border-card">
+    <el-tab-pane label="回执审核">
+      <Receipt/> 
+    </el-tab-pane>
+    <el-tab-pane label="审核通过">
+      <ReceiptSuccess/>
+    </el-tab-pane>
+    <el-tab-pane label="审核失败">
+      <ReceiptReject/>
+    </el-tab-pane>
+
+  </el-tabs>
+
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        data: [{
-          label: '回执申请',
-          children: [{
-            label: '二级 1-1',
-            children: [{
-              label: '三级 1-1-1'
-            }]
-          }]
-        }, {
-          label: '申请审核',
-          children: [{
-            label: '二级 2-1',
-            children: [{
-              label: '三级 2-1-1'
-            }]
-          }, {
-            label: '二级 2-2',
-            children: [{
-              label: '三级 2-2-1'
-            }]
-          }]
-        }, {
-          label: '申请成功',
-          children: [{
-            label: '二级 2-1',
-            children: [{
-              label: '三级 2-1-1'
-            }]
-          }, {
-            label: '二级 2-2',
-            children: [{
-              label: '三级 2-2-1'
-            }]
-          }]
-        },{
-          label: '审核失败',
-          children: [{
-            label: '二级 3-1',
-            children: [{
-              label: '三级 3-1-1'
-            }]
-          }, {
-            label: '二级 3-2',
-            children: [{
-              label: '三级 3-2-1'
-            }]
-          }]
-        }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        }
-      };
-    },
-    methods: {
-      handleNodeClick(data) {
-        console.log(data);
-      }
-    }
-  };
+import Receipt from '@/components/Receipt'
+import ReceiptReject from '@/components/ReceiptReject'
+import ReceiptSuccess from '@/components/ReceiptSuccess'
+export default {
+  components: {
+    Receipt,
+    ReceiptReject,
+    ReceiptSuccess,
+  },
+  data() {
+    return {
+
+
+    };
+  },
+  methods: {
+
+  }
+};
 </script>
 <style>
 </style>

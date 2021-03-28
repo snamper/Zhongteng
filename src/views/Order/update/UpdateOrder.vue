@@ -2,40 +2,43 @@
   <el-dialog :title="type" :visible.sync="isShow">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
+
         <el-col :span="12">
-          <el-form-item prop="sName" label="服务站名称" :label-width="formLabelWidth">
-            <el-input v-model="datas.sName"></el-input>
+          <el-form-item label="客户编码" prop="customerId" :label-width="formLabelWidth">
+            <el-input v-model="datas.customerId"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="服务站所在省" prop="sProvince" :label-width="formLabelWidth">
-            <el-input v-model="datas.sProvince"></el-input>
+          <el-form-item label="客户名称" prop="ctName" :label-width="formLabelWidth">
+            <el-input v-model="datas.ctName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="服务站所在市" prop="sCity" :label-width="formLabelWidth">
-            <el-input v-model="datas.sCity"></el-input>
+          <el-form-item label="负责人一" prop="empName1" :label-width="formLabelWidth">
+            <el-input v-model="datas.empName1"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="服务站联系人" prop="sPerson" :label-width="formLabelWidth">
-            <el-input v-model="datas.sPerson"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="联系人部门" prop="sDepartment" :label-width="formLabelWidth">
-            <el-input v-model="datas.sDepartment"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="联系方式" prop="sPhone" :label-width="formLabelWidth">
-            <el-input v-model="datas.sPhone"></el-input>
+          <el-form-item label="负责人二" prop="empName2" :label-width="formLabelWidth">
+            <el-input v-model="datas.empName2"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="操作人" :label-width="formLabelWidth">
-            <el-input v-model="datas.operator" :disabled="true"></el-input>
+          <el-form-item prop="typeId" label="车型编码" :label-width="formLabelWidth">
+            <el-input v-model="datas.typeId"></el-input>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="12">
+          <el-form-item label="车型名称" prop="carName" :label-width="formLabelWidth">
+            <el-input v-model="datas.carName"></el-input>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="12">
+          <el-form-item label="订单数量" prop="qty" :label-width="formLabelWidth">
+            <el-input v-model="datas.qty"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -50,7 +53,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { factory } from '@/api'
+import { order } from '@/api'
 export default {
   props: {
     isShow: {
@@ -61,6 +64,10 @@ export default {
       type: String,
       default: '',
     },
+    selectData: {
+      require: true,
+      type: Object
+    },
     datas: {
       type: Object,
     }
@@ -69,30 +76,25 @@ export default {
   data() {
     return {
       rules: {
-        sName: [
-          { required: true, message: '请输入服务站名称', trigger: 'blur' },
 
+        ctName: [
+          { required: true, message: '请输入客户名称', trigger: 'blur' }
         ],
-        sProvince: [
-          { required: true, message: '请输入服务站所在省', trigger: 'blur' }
+        typeId: [
+          { required: true, message: '请输入车型编码', trigger: 'blur' }
         ],
-        sCity: [
-          { required: true, message: '请输入服务站所在市', trigger: 'blur' }
+        carName: [
+          { required: true, message: '请输入车型名称', trigger: 'blur' }
         ],
-        sAddress: [
-          { required: true, message: '请输入详细地址', trigger: 'blur' }
+        qty: [
+          { required: true, message: '请输入订单数量', trigger: 'blur' }
         ],
-        sPerson: [
-          { required: true, message: '请输入联系人', trigger: 'blur' }
+        empName1: [
+          { required: true, message: '请输入负责人一', trigger: 'blur' }
         ],
-        sDepartment: [
-          { required: true, message: '请输入联系人部门', trigger: 'blur' }
+        empName2: [
+          { required: true, message: '请输入负责人二', trigger: 'blur' }
         ],
-        sPhone: [
-          { required: true, message: '请输入联系人手机', trigger: 'blur' }
-        ],
-
-
       },
 
       form: {
@@ -125,7 +127,7 @@ export default {
       const { $axios, datas, } = this;
       datas.operator = this.user_info.user_name;
       datas.operatorDate = Date.now();
-      $axios.post(factory.addOrUpdate, { ...datas }).then(res => {
+      $axios.post(order.addOrUpdate, { ...datas }).then(res => {
 
         if (res.data.errCode === 200) {
           this.$message.success(res.data.msg)

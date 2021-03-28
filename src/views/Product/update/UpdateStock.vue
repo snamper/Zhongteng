@@ -4,76 +4,72 @@
       <el-row>
         <el-col :span="12">
           <el-form-item
-            prop="ctName"
-            label="客户名称"
+            prop="stockId"
+            label="库存编码"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="datas.ctName"></el-input>
+            <el-input v-model="datas.stockId"></el-input>
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
           <el-form-item
-            label="客户所在省"
-            prop="ctProvince"
+            label="库存日期"
+            prop="invDate"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="datas.ctProvince"></el-input>
+            <el-date-picker
+              type="datetime"
+              v-model="datas.invDate"
+              placeholder="选择日期时间"
+            >
+            </el-date-picker>
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
           <el-form-item
-            label="客户所在市"
-            prop="ctCity"
+            prop="productId"
+            label="产品编码"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="datas.ctCity"></el-input>
+            <el-input v-model="datas.productId"></el-input>
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
           <el-form-item
-            label="客户详细地址"
-            prop="ctAddress"
+            prop="pName"
+            label="产品名称"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="datas.ctAddress"></el-input>
+            <el-input v-model="datas.pName"></el-input>
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
           <el-form-item
-            label="客户联系人"
-            prop="ctPerson"
+            prop="batchNum"
+            label="批号"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="datas.ctPerson"></el-input>
+            <el-input v-model="datas.batchNum"></el-input>
           </el-form-item>
         </el-col>
+
+        <el-col :span="12">
+          <el-form-item prop="qty" label="数量" :label-width="formLabelWidth">
+            <el-input v-model="datas.qty"></el-input>
+          </el-form-item>
+        </el-col>
+
         <el-col :span="12">
           <el-form-item
-            label="联系人手机"
-            prop="psPhone"
+            prop="remarks"
+            label="备注"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="datas.psPhone"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="客户服务站编码" :label-width="formLabelWidth">
-            <el-input v-model="datas.serviceId"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="我方负责人编码" :label-width="formLabelWidth">
-            <el-input v-model="datas.userId"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="员工姓名" :label-width="formLabelWidth">
-            <el-input v-model="datas.empName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="操作人" :label-width="formLabelWidth">
-            <el-input v-model="datas.operator" :disabled="true"></el-input>
+            <el-input v-model="datas.remarks"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -87,7 +83,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { customer } from "@/api";
+import { stock } from "@/api";
 export default {
   props: {
     isShow: {
@@ -106,28 +102,23 @@ export default {
   data() {
     return {
       rules: {
-        ctName: [
-          { required: true, message: "请输入客户名称", trigger: "blur" },
+        stockId: [
+          { required: false, message: "请输入库存编码", trigger: "blur" },
         ],
-        ctProvince: [
-          { required: true, message: "请输入客户所在省", trigger: "blur" },
+        invDate: [
+          { required: true, message: "请输入库存日期", trigger: "blur" },
         ],
-        ctCity: [
-          { required: true, message: "请输入客户所在市", trigger: "blur" },
+        productId: [
+          { required: true, message: "请输入产品编码", trigger: "blur" },
         ],
-        ctAddress: [
-          {
-            required: true,
-            message: "请输入客户客户详细地址",
-            trigger: "blur",
-          },
-        ],
-        ctPerson: [
-          { required: true, message: "请输入联系人", trigger: "blur" },
-        ],
-        psPhone: [
-          { required: true, message: "请输入联系人手机", trigger: "blur" },
-        ],
+
+        pName: [{ required: true, message: "请输入产品名称", trigger: "blur" }],
+
+        batchNum: [{ required: true, message: "请输入批号", trigger: "blur" }],
+
+        qty: [{ required: true, message: "请输入数量", trigger: "blur" }],
+
+        remarks: [{ required: true, message: "请输入备注", trigger: "blur" }],
       },
 
       form: {},
@@ -137,16 +128,13 @@ export default {
   computed: {
     ...mapGetters(["user_info"]),
   },
-  created() {},
+
   watch: {
     type: function (val) {
       if (val === "编辑") {
         this.$nextTick(() => {
           this.$refs["ruleForm"].clearValidate();
         });
-      }
-      if (val === "新增") {
-        this.datas.operator = this.user_info.user_name;
       }
     },
   },
@@ -156,8 +144,9 @@ export default {
       const { $axios, datas } = this;
       datas.operator = this.user_info.user_name;
       datas.operatorDate = Date.now();
+
       $axios
-        .post(customer.addInfo, { ...datas })
+        .post(stock.addOrUpdate, { ...datas })
         .then((res) => {
           if (res.data.errCode === 200) {
             this.$message.success(res.data.msg);

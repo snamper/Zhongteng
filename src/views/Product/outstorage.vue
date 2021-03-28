@@ -6,7 +6,6 @@
           <el-input
             v-model="searchValue"
             placeholder="请输入厂家名称"
-            
           ></el-input>
         </el-col>
         <el-col :span="6">
@@ -34,18 +33,22 @@
     >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column
-        prop="stockId"
+        prop="deliveryId"
         type="primary"
-        label="库存编码"
+        label="出库编码"
         width="100"
       >
       </el-table-column>
-      <el-table-column prop="invDate" label="库存日期" width="150">
+      <el-table-column prop="billingDate" label="销售日期" width="150">
         <template slot-scope="scope">
-          {{ scope.row.invDate | formatDate }}
+          {{ scope.row.billingDate | formatDate }}
         </template>
       </el-table-column>
-
+      <el-table-column prop="deliveryDate" label="出库日期" width="150">
+        <template slot-scope="scope">
+          {{ scope.row.deliveryDate | formatDate }}
+        </template>
+      </el-table-column>
       <el-table-column prop="productId" label="产品编码" width="150">
       </el-table-column>
       <el-table-column prop="pName" label="产品名称" width="150">
@@ -53,7 +56,38 @@
       <el-table-column prop="batchNum" label="批号" width="150">
       </el-table-column>
       <el-table-column prop="qty" label="数量" width="150"> </el-table-column>
-      <el-table-column prop="remarks" label="备注" > </el-table-column>
+      <el-table-column prop="price" label="单价" width="150"> </el-table-column>
+      <el-table-column prop="totalPrice" label="总价" width="150">
+      </el-table-column>
+      <el-table-column prop="coustomerId" label="客户编码" width="150">
+      </el-table-column>
+
+      <el-table-column prop="custName" label="客户名称" width="200">
+      </el-table-column>
+      <el-table-column prop="delBillno" label="单据编号" width="200">
+      </el-table-column>
+
+      <el-table-column prop="operator" label="操作人"> </el-table-column>
+      <el-table-column prop="operatorDate" label="操作时间" width="200">
+        <template slot-scope="scope">
+          {{ scope.row.operatorDate | formatDate }}
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="empName" label="审核人" width="100">
+      </el-table-column>
+
+      <el-table-column prop="result" label="审核结果" width="120">
+      </el-table-column>
+
+      <el-table-column prop="opinion" label="审核意见" width="200">
+      </el-table-column>
+
+      <el-table-column prop="exaTime" label="审核时间" width="120">
+        <template slot-scope="scope">
+          {{ scope.row.exaTime | formatDate }}
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
@@ -86,18 +120,18 @@
       :total="totalArr.length - 1"
     >
     </el-pagination>
-    <UpdateStock
+    <UpdateOutstorage
       :isShow="isShow"
       :datas="selectData"
       :update="update"
       :type="type"
-    ></UpdateStock>
+    ></UpdateOutstorage>
   </div>
 </template>
 
 <script>
-import { stock } from "@/api";
-import UpdateStock from "./update/UpdateStock";
+import { outstorage } from "@/api";
+import UpdateOutstorage from "./update/UpdateOutstorage";
 
 export default {
   data() {
@@ -112,18 +146,29 @@ export default {
       selectDelete: [], //单条删除
       type: "",
       json_fields: {
-        库存编码: "stockId",
-        库存日期: "invDate",
+        出库编码: "deliveryId",
+        销售日期: "billingDate",
+        出库日期: "deliveryDate",
         产品编码: "productId",
         产品名称: "pName",
         批号: "batchNum",
         数量: "qty",
-        备注: "remarks",
+        单价: "price",
+        总价: "totalPrice",
+        客户编码: "coustomerId",
+        客户名称: "custName",
+        单据编号: "delBillno",
+        操作者: "operator",
+        操作时间: "operatorDate",
+        审核人: "empName",
+        审核结果: "result",
+        审核意见: "opinion",
+        审核时间: "exaTime",
       },
     };
   },
   components: {
-    UpdateStock,
+    UpdateOutstorage,
   },
   created() {
     this.getData();
@@ -131,7 +176,7 @@ export default {
   methods: {
     getData() {
       this.$axios
-        .post(stock.query, { productId: this.searchValue })
+        .post(outstorage.query, { deliveryId: this.searchValue })
         .then((res) => {
           const data = res.data;
           if (data.errCode == 200) {
@@ -151,7 +196,7 @@ export default {
     },
     //修改内容
     update(value) {
-      this.$axios.post(stock.addOrUpdate, { ...value }).then((res) => {
+      this.$axios.post(outstorage.addOrUpdate, { ...value }).then((res) => {
         const data = res.data;
         if (data.errCode == 200) {
           this.getData();
@@ -182,7 +227,7 @@ export default {
       });
     },
     handleDelete(index, row) {
-      this.multipleSelection = [{ stockId: row.stockId }];
+      this.multipleSelection = [{ deliveryId: row.deliveryId }];
       this.deletesHandle(this.multipleSelection);
     },
     handleSelectionChange(val) {
@@ -192,7 +237,7 @@ export default {
       } else {
         val.forEach((item) => {
           console.log(item.deliveryId);
-          arr.push({ stockId: item.stockId });
+          arr.push({ deliveryId: item.deliveryId });
         });
         this.selectDelete = arr;
       }
@@ -200,8 +245,8 @@ export default {
     deletesHandle(params) {
       if (params.length > 0) {
         this.$axios
-          .post(stock.delete, {
-            stockIds: params,
+          .post(outstorage.delete, {
+            deliveryIds: params,
           })
           .then((res) => {
             console.log(res);

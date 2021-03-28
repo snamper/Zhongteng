@@ -42,6 +42,12 @@ export const services = {
   addOrUpdate: '/api/v1/base/addOrUpdateServicesInfo',
   delete: '/api/v1/base/removeServices',
 }
+//保险信息
+export const insurance = {
+  query: '/api/v1/base/queryInsuranceList',
+  addOrUpdate: '/api/v1/base/addOrUpdateInsurance',
+  delete: '/api/v1/base/removeInsuranceInfo',
+}
 
 //申请信息
 export const applyInfo = {
@@ -49,4 +55,59 @@ export const applyInfo = {
   addOrUpdate: '/api/v1/repair/addOrUpdateApplication',
   delete: '/api/v1/repair/removeApplicationInfo',
 }
-//
+
+//申请审核
+export const appExamine = {
+  query: '/api/v1/repair/queryAppExamineList',
+  addOrUpdate: '/api/v1/repair/addOrUpdateAppExamine',
+  delete: '/api/v1/repair/removeAppExamineInfo',
+}
+
+//回执信息
+export const receipt = {
+  query: '/api/v1/repair/queryReceiptList',
+  addOrUpdate: '/api/v1/repair/addOrUpdateReceipt',
+  delete: '/api/v1/repair/removeReceiptInfo',
+}
+
+//回执审核
+export const repExamine= {
+  query: '/api/v1/repair/queryRepExamineList',
+  addOrUpdate: '/api/v1/repair/addOrUpdateRepExamine',
+  delete: '/api/v1/repair/removeRepExamineInfo',
+}
+
+//订单信息
+export const order = {
+  query: '/api/v1/order/queryCarOrderList',
+  addOrUpdate: '/api/v1/order/addOrUpdateCarOrder',
+  delete: '/api/v1/order/removeCarOrderInfo',
+}
+
+//配件信息
+export const product = {
+  query: '/api/v1/product/queryProductList',
+  addOrUpdate: '/api/v1/product/addOrUpdateProduct',
+  delete: '/api/v1/product/removeProductInfo',
+}
+
+//入库信息
+export const instorage = {
+  query: '/api/v1/product/queryInStorageList',
+  addOrUpdate: '/api/v1/product/addOrUpdateInStorage',
+  delete: '/api/v1/product/removeInStorageInfo',
+}
+
+//出库信息
+export const outstorage = {
+  query: '/api/v1/product/queryOutStorageList',
+  addOrUpdate: '/api/v1/product/addOrUpdateOutStorage',
+  delete: '/api/v1/product/removeOutStorageInfo',
+}
+
+//库存信息
+export const stock = {
+  query: '/api/v1/product/queryStockList',
+  addOrUpdate: '/api/v1/product/addOrUpdateStock',
+  delete: '/api/v1/product/removeStockInfo',
+}

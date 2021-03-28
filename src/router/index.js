@@ -104,7 +104,7 @@ export const routes = [
         name: 'CartInsurance',
         component: () =>
           import(
-            /* webpackChunkName: "CartIndex" */ '../views/Cart/Insurance/index.vue'
+            /* webpackChunkName: "CartIndex" */ '../views/Cart/insurance.vue'
           ),
         meta: {
           title: '保险管理',
@@ -124,11 +124,11 @@ export const routes = [
     },
     children: [
       {
-        path: '/repair/index',
-        name: 'RepairIndex',
+        path: '/repair/application',
+        name: 'RepairApplication',
         component: () =>
           import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Repair/index.vue'
+            /* webpackChunkName: "HomeIndex" */ '../views/Repair/application.vue'
           ),
         meta: {
           title: '维修审核',
@@ -172,10 +172,10 @@ export const routes = [
     children: [
       {
         path: '/order/index',
-        name: 'OrderIndex',
+        name: 'OrderIndex-',
         component: () =>
           import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Order/index.vue'
+            /* webpackChunkName: "HomeIndex" */ '../views/Order/order.vue'
           ),
         meta: {
           title: '车辆订单管理',
@@ -229,11 +229,11 @@ export const routes = [
     },
     children: [
       {
-        path: '/product/index',
-        name: 'ProductIndex',
+        path: '/product/product',
+        name: 'ProductProduct',
         component: () =>
           import(
-            /* webpackChunkName: "ProductIndex" */ '../views/Product/index.vue'
+            /* webpackChunkName: "ProductIndex" */ '../views/Product/product.vue'
           ),
         meta: {
           title: '配件档案信息',
@@ -241,11 +241,11 @@ export const routes = [
         },
       },
       {
-        path: '/product/purchase',
-        name: 'Productpurchase',
+        path: '/product/instorage',
+        name: 'ProductInstorage',
         component: () =>
           import(
-            /* webpackChunkName: "ProductIndex" */ '../views/Product/purchase.vue'
+            /* webpackChunkName: "ProductIndex" */ '../views/Product/instorage.vue'
           ),
         meta: {
           title: '入库管理',
@@ -253,11 +253,11 @@ export const routes = [
         },
       },
       {
-        path: '/product/delivery',
-        name: 'Productdelivery',
+        path: '/product/outstorage',
+        name: 'Productoutstorage',
         component: () =>
           import(
-            /* webpackChunkName: "ProductIndex" */ '../views/Product/delivery.vue'
+            /* webpackChunkName: "ProductIndex" */ '../views/Product/outstorage.vue'
           ),
         meta: {
           title: '出库管理',

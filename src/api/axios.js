@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress'
-
+import router from '@/router'
 axios.interceptors.request.use(
   (config) => {
     let token = localStorage.getItem('token') ?? ''
@@ -24,16 +24,18 @@ axios.interceptors.response.use(
   },
   (error) => {
     //关闭加载
+    
     NProgress.done()
     if (error.response) {
-      console.log(error.response)
+      if(error.response.data.message=='token has expired'){
+        Message.error('用户信息失效，请重新登录')
+        router.replace('/login')
+        localStorage.removeItem('token')
+        return false;
+      }
       //弹出错误信息
       Message.error(error.response.data.message ?? '服务器出错')
-      //如果是401和404的话就跳转登陆页面
-      if (error.response.status == 401 || error.response.status == 404) {
-        //清除token信息
-        localStorage.removeItem('token')
-      }
+     
     }
     return Promise.reject(error.response.data)
   }

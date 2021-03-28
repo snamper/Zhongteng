@@ -51,29 +51,83 @@
       >
       </el-table-column>
       <el-table-column
-        prop="productId"
+        prop="purchaseId"
         type="primary"
-        label="产品编码"
-        width="180"
+        label="入库编码"
+        width="100"
       >
       </el-table-column>
+      <el-table-column
+        prop="purDate"
+        label="采购日期"
+        width="150"
+      >
+              <template slot-scope="scope">
+          {{scope.row.purDate|formatDate}}
+        </template>
+      </el-table-column>      
+      <el-table-column
+        prop="storageDate"
+        label="入库日期"
+        width="150"
+      >
+              <template slot-scope="scope">
+          {{scope.row.storageDate|formatDate}}
+        </template>
+      </el-table-column>      
+      <el-table-column
+        prop="productId"
+        label="产品编码"
+        width="150"
+      >
+      </el-table-column>      
       <el-table-column
         prop="pName"
         label="产品名称"
         width="150"
       >
+      </el-table-column>      
+      <el-table-column
+        prop="batchNum"
+        label="批号"
+        width="150"
+      >
+      </el-table-column>      
+      <el-table-column
+        prop="qty"
+        label="数量"
+        width="150"
+      >
+      </el-table-column>      
+      <el-table-column
+        prop="price"
+        label="单价"
+        width="150"
+      >
+      </el-table-column>      
+      <el-table-column
+        prop="totalPrice"
+        label="总价"
+        width="150"
+      >
+      </el-table-column>      
+      <el-table-column
+        prop="supplierId"
+        label="供应商编码"
+        width="150"
+      >
       </el-table-column>
 
       <el-table-column
-        prop="factory"
-        label="生产厂家"
+        prop="supplierName"
+        label="供应商名称"
         width="200"
       >
 
       </el-table-column>
       <el-table-column
-        prop="pSpec"
-        label="产品规格"
+        prop="billNum"
+        label="单据编号"
         width="200"
       >
       </el-table-column>
@@ -93,6 +147,39 @@
           {{scope.row.operatorDate|formatDate}}
         </template>
       </el-table-column>
+
+      <el-table-column
+        prop="empName"
+        label="审核人"
+        width="100"
+      >
+      </el-table-column>
+
+            <el-table-column
+        prop="result"
+        label="审核结果"
+        width="120"
+      >
+      </el-table-column>
+
+            <el-table-column
+        prop="opinion"
+        label="审核意见"
+        width="200"
+      >
+      </el-table-column>
+
+               <el-table-column
+        prop="exaTime"
+        label="审核时间"
+        width="120"
+      >
+              <template slot-scope="scope">
+          {{scope.row.exaTime|formatDate}}
+        </template>
+      </el-table-column>
+
+
       <el-table-column
         label="操作"
         fixed="right"
@@ -132,18 +219,18 @@
       :total="totalArr.length-1"
     >
     </el-pagination>
-    <UpdateProduct
+    <UpdateInstorage
       :isShow='isShow'
       :datas='selectData'
       :update="update"
       :type='type'
-    ></UpdateProduct>
+    ></UpdateInstorage>
   </div>
 </template>
 
 <script>
-import { product } from '@/api'
-import UpdateProduct from './update/UpdateProduct'
+import { instorage } from '@/api'
+import UpdateInstorage from './update/UpdateInstorage'
 
 export default {
   data() {
@@ -158,24 +245,36 @@ export default {
       selectDelete: [],//单条删除
       type: '',
       json_fields: {
+        入库编码: 'purchaseId',
+        采购日期: 'purDate',
+        入库日期: 'storageDate',
         产品编码: 'productId',
         产品名称: 'pName',
-        生厂厂家: 'factory',
-        产品规格: 'pSpec',
+        批号: 'batchNum',
+        数量: 'qty',
+        单价: 'price',
+        总价: 'totalPrice',
+        供应商编码: 'supplierId',
+        供应商名称: 'supplierName',
+        入库单号: 'billNum',
         操作者: 'operator',
         操作时间: 'operatorDate',
+        审核人: 'empName',
+        审核结果: 'result',
+        审核意见: 'opinion',
+        审核时间: 'exaTime',
       },
     }
   },
   components: {
-    UpdateProduct
+    UpdateInstorage
   },
   created() {
     this.getData();
   },
   methods: {
     getData() {
-      this.$axios.post(product.query, { productId: this.searchValue }).then(res => {
+      this.$axios.post(instorage.query, { purchaseId: this.searchValue }).then(res => {
         const data = res.data;
         if (data.errCode == 200) {
           this.cartList = this.paging(this.page, this.pageSize, data.data)
@@ -195,7 +294,7 @@ export default {
     //修改内容
     update(value) {
 
-      this.$axios.post(product.addOrUpdate, { ...value }).then(res => {
+      this.$axios.post(instorage.addOrUpdate, { ...value }).then(res => {
         const data = res.data;
         if (data.errCode == 200) {
           this.getData()
@@ -228,7 +327,7 @@ export default {
 
     },
     handleDelete(index, row) {
-      this.multipleSelection = [{ productId: row.productId }]
+      this.multipleSelection = [{ purchaseId: row.purchaseId }]
       this.deletesHandle(this.multipleSelection)
     },
     handleSelectionChange(val) {
@@ -237,16 +336,16 @@ export default {
         this.selectDelete = []
       } else {
         val.forEach(item => {
-          console.log(item.productId)
-          arr.push({ productId: item.productId })
+          console.log(item.purchaseId)
+          arr.push({ purchaseId: item.purchaseId })
         })
         this.selectDelete = arr;
       }
     },
      deletesHandle(params) {
       if (params.length > 0) {
-        this.$axios.post(product.delete, {
-          productIds: params
+        this.$axios.post(instorage.delete, {
+          purchaseIds: params
         }).then(res => {
           console.log(res)
           const data = res.data;
