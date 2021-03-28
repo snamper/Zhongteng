@@ -1,19 +1,17 @@
 <template>
   <div class="breadcrumb">
-    <i
-      :class='[icon]'
-      @click="menuIcon"
-    ></i>
+    <i :class="[icon]" @click="menuIcon"></i>
 
     <div class="breadTitle">
       <el-breadcrumb>
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 
         <el-breadcrumb-item
-          v-for="(item,index) in breadList"
+          v-for="(item, index) in breadList"
           :key="index"
           :to="item.path"
-        >{{item.meta.title}}</el-breadcrumb-item>
+          >{{ item.meta.title }}</el-breadcrumb-item
+        >
       </el-breadcrumb>
     </div>
     <div class="username">
@@ -21,54 +19,48 @@
         src="~@/assets/images/logo.png"
         alt="江苏中腾新能源有限公司"
         class="logo"
-      >
+      />
       <el-dropdown @command="handleCommand">
-
-        <img
-          src="~@/assets/images/username.gif"
-          alt=""
-        >
+        <img src="~@/assets/images/username.gif" alt="" />
 
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="username">{{user_info.user_name}}</el-dropdown-item>
-          <el-dropdown-item command='loginOut'> 退出登陆</el-dropdown-item>
-
+          <el-dropdown-item command="username">{{
+            user_info.user_name
+          }}</el-dropdown-item>
+          <el-dropdown-item command="loginOut"> 退出登陆</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from "vuex";
 export default {
-  name: 'Bread',
+  name: "Bread",
   data: function () {
     return {
       breadList: [],
-
-    }
+    };
   },
   watch: {
     $route: {
       handler: function () {
-        this.getBreadcrumb()
+        this.getBreadcrumb();
       },
       // 深度观察监听
       deep: true,
-      immediate: true
+      immediate: true,
     },
-
   },
   computed: {
-    ...mapGetters(['user_info', 'menuFlag']),
+    ...mapGetters(["user_info", "menuFlag"]),
     icon: function () {
-      return this.menuFlag ? ' icon el-icon-s-unfold' : 'icon el-icon-s-fold';
+      return this.menuFlag ? " icon el-icon-s-unfold" : "icon el-icon-s-fold";
     },
   },
   methods: {
-    ...mapMutations(['SET_MENU']),
+    ...mapMutations(["SET_MENU"]),
     isHome(route) {
       return route.name === "Home";
     },
@@ -79,23 +71,22 @@ export default {
         matched = [{ path: "/home", meta: { title: "首页" } }].concat(matched);
       }
 
-      this.breadList = matched.filter(item => item.meta.title);
+      this.breadList = matched.filter((item) => item.meta.title);
     },
     handleCommand(command) {
-      if (command == 'loginOut') {
-        localStorage.removeItem('token');
-        this.$router.replace('/login')
+      if (command == "loginOut") {
+        localStorage.removeItem("token");
+        this.$router.replace("/login");
       }
     },
     menuIcon() {
-      this.SET_MENU(!this.menuFlag)
-    }
+      this.SET_MENU(!this.menuFlag);
+    },
   },
   mounted() {
-    console.log(this.menuFlag)
+    console.log(this.menuFlag);
   },
-
-}
+};
 </script>
 
 <style lang='scss' scoped>
