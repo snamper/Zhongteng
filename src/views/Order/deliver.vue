@@ -45,7 +45,7 @@
 
       <el-table-column prop="operatorDate" label="操作时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.operatorDate | formatDate }}
+          {{ scope.row.operatorDate | formatDate(true) }}
         </template>
       </el-table-column>
 

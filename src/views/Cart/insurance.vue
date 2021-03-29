@@ -70,7 +70,7 @@
       </el-table-column>
       <el-table-column prop="insOptdate" label="操作时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.insOptdate | formatDate }}
+          {{ scope.row.insOptdate | formatDate(true) }}
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="150">

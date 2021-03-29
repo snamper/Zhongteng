@@ -17,9 +17,14 @@ import EchartsBox from '@/components/EchartsBox'
 Vue.prototype.$_ = _
 Vue.prototype.$moment = Moment
 // 定义全局时间戳过滤器
-Vue.filter('formatDate', function(value) {
-  return value ? Moment(value).format('YYYY-MM-DD') : '暂无'
+Vue.filter('formatDate', function(value, isHourse = false) {
+  if (isHourse) {
+    return value ? Moment(value).format('YYYY-MM-DD HH:mm:ss') : '暂无'
+  } else {
+    return value ? Moment(value).format('YYYY-MM-DD ') : '暂无'
+  }
 })
+
 //全局分页混入
 Vue.mixin(pagination)
 

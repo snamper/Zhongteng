@@ -111,6 +111,16 @@ export const routes = [
           icon: 'el-icon-s-marketing',
         },
       },
+      {
+        path: '/cart/rent',
+        name: 'Cartrent',
+        component: () =>
+          import(/* webpackChunkName: "HomeIndex" */ '../views/Cart/rent.vue'),
+        meta: {
+          title: '租金管理',
+          icon: 'el-icon-s-shop',
+        },
+      },
     ],
   },
   {
@@ -206,16 +216,7 @@ export const routes = [
           icon: 'el-icon-s-shop',
         },
       },
-      {
-        path: '/order/rent',
-        name: 'Orderrent',
-        component: () =>
-          import(/* webpackChunkName: "HomeIndex" */ '../views/Order/rent.vue'),
-        meta: {
-          title: '租金管理',
-          icon: 'el-icon-s-shop',
-        },
-      },
+      
     ],
   },
   {

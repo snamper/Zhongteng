@@ -1,52 +1,94 @@
 <template>
-  <el-dialog :title="type" :visible.sync="isShow">
-    <el-form :model="datas" ref="ruleForm" :rules="rules">
+  <el-dialog
+    :title="type"
+    :visible.sync="isShow"
+  >
+    <el-form
+      :model="datas"
+      ref="ruleForm"
+      :rules="rules"
+    >
       <el-row>
-
+ 
         <el-col :span="12">
-          <el-form-item label="客户编码" prop="customerId" :label-width="formLabelWidth">
+          <el-form-item
+            label="客户编码"
+            prop="customerId"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.customerId"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="客户名称" prop="ctName" :label-width="formLabelWidth">
+          <el-form-item
+            label="客户名称"
+            prop="ctName"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.ctName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="负责人一" prop="empName1" :label-width="formLabelWidth">
+          <el-form-item
+            label="负责人一"
+            prop="empName1"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.empName1"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="负责人二" prop="empName2" :label-width="formLabelWidth">
+          <el-form-item
+            label="负责人二"
+            prop="empName2"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.empName2"></el-input>
           </el-form-item>
         </el-col>
-
+        
+ 
         <el-col :span="12">
-          <el-form-item prop="typeId" label="车型编码" :label-width="formLabelWidth">
+          <el-form-item
+            prop="typeId"
+            label="车型编码"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.typeId"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="车型名称" prop="carName" :label-width="formLabelWidth">
+          <el-form-item
+            label="车型名称"
+            prop="carName"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.carName"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="订单数量" prop="qty" :label-width="formLabelWidth">
+          <el-form-item
+            label="订单数量"
+            prop="qty"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.qty"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div
+      slot="footer"
+      class="dialog-footer"
+    >
       <el-button @click="$parent.isShow = false">取 消</el-button>
-      <el-button type="primary" @click="update('ruleForm')">确 定</el-button>
+      <el-button
+        type="primary"
+        @click="update('ruleForm')"
+      >确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -89,7 +131,7 @@ export default {
         qty: [
           { required: true, message: '请输入订单数量', trigger: 'blur' }
         ],
-        empName1: [
+                empName1: [
           { required: true, message: '请输入负责人一', trigger: 'blur' }
         ],
         empName2: [

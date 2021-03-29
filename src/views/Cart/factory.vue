@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column prop="operatorDate" label="操作时间" width="200">
         <template slot-scope="scope">
-          {{scope.row.operatorDate|formatDate}}
+          {{scope.row.operatorDate|formatDate(true)}}
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
@@ -70,7 +70,7 @@
 <script>
 import { factory } from '@/api'
 import UpdateFactory from './update/UpdateFactory'
-
+import { TextToCode, provinceAndCityDataPlus, CodeToText } from 'element-china-area-data'
 export default {
   data() {
     return {
@@ -127,6 +127,17 @@ export default {
       })
     },
     handleEdit(index, row) {
+      let { ctProvince, ctCity } = row;
+      let cityCode = '';
+      let ctProvinceCode = ''
+
+      if (TextToCode[ctProvince]) {
+        ctProvinceCode = TextToCode[ctProvince].code;
+      }
+      if (TextToCode[ctProvince] && TextToCode[ctProvince][ctCity]) {
+        cityCode = TextToCode[ctProvince][ctCity].code
+      }
+      row.region = [ctProvinceCode, cityCode]
       this.selectData = { ...row };
       console.log(this.selectData)
       this.type = '编辑'

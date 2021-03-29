@@ -4,66 +4,160 @@
       <div class="params">
         <el-row>
           <el-col :span="5">
-            <el-input v-model="searchValue" placeholder="请输入厂家名称"></el-input>
+            <el-input
+              v-model="searchValue"
+              placeholder="请输入厂家名称"
+            ></el-input>
           </el-col>
           <el-col :span="1.8">
-            <el-button type="primary" @click="queryClick">查询</el-button>
+            <el-button
+              type="primary"
+              @click="queryClick"
+            >查询</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="primary" @click="addCart">增加</el-button>
+            <el-button
+              type="primary"
+              @click="addCart"
+            >增加</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" @click="deletesAll">批量删除</el-button>
+            <el-button
+              type="danger"
+              @click="deletesAll"
+            >批量删除</el-button>
           </el-col>
           <el-col :span="1.5">
-            <download-excel class="export-excel-wrapper" :data="cartList" :fields="json_fields">
+            <download-excel
+              class="export-excel-wrapper"
+              :data="cartList"
+              :fields="json_fields"
+            >
               <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
               <el-button type="primary">导出EXCEL</el-button>
             </download-excel>
           </el-col>
         </el-row>
       </div>
-      <el-table :data="cartList" style="width: 100%" height="700" border @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column prop="receiptId" label="回执单号" width="100">
+      <el-table
+        :data="cartList"
+        style="width: 100%"
+        height="700"
+        border
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column
+          type="selection"
+          width="55"
+        > </el-table-column>
+        <el-table-column
+          prop="receiptId"
+          label="回执单号"
+          width="100"
+        >
         </el-table-column>
-        <el-table-column prop="vin" label="车架号" width="200">
+        <el-table-column
+          prop="vin"
+          label="车架号"
+          width="200"
+        >
         </el-table-column>
-        <el-table-column prop="list" label="结算清单" width="150">
+        <el-table-column
+          prop="list"
+          label="结算清单"
+          width="150"
+        >
         </el-table-column>
-        <el-table-column prop="invoice" label="增值税发票" width="150">
+        <el-table-column
+          prop="invoice"
+          label="增值税发票"
+          width="150"
+        >
         </el-table-column>
-        <el-table-column prop="appPayment" label="付款申请书" width="100">
+        <el-table-column
+          prop="appPayment"
+          label="付款申请书"
+          width="100"
+        >
         </el-table-column>
-        <el-table-column prop="oldPart1" label="配件信息" width="100">
+        <el-table-column
+          prop="oldPart1"
+          label="配件信息"
+          width="100"
+        >
         </el-table-column>
         <!-- <el-table-column prop="oldPart2" label="配件2"> </el-table-column>
           <el-table-column prop="oldPart3" label="配件3"> </el-table-column> -->
-        <el-table-column prop="empName" label="上传人" width="100">
+        <el-table-column
+          prop="empName"
+          label="上传人"
+          width="100"
+        >
         </el-table-column>
-        <el-table-column prop="upDate" label="上传时间" width="150">
+        <el-table-column
+          prop="upDate"
+          label="上传时间"
+          width="150"
+        >
           <template slot-scope="scope">
             {{ scope.row.upDate | formatDate }}
           </template>
         </el-table-column>
-        <el-table-column prop="remarks" label="备注"> </el-table-column>
-        <el-table-column label="操作" fixed="right" width="200">
+        <el-table-column
+          prop="remarks"
+          label="备注"
+        > </el-table-column>
+        <el-table-column
+          label="操作"
+          fixed="right"
+          width="200"
+        >
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">审核</el-button>
-            <el-button size="mini" type="success" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)"
+            >审核</el-button>
+            <el-button
+              size="mini"
+              type="success"
+              @click="handleEdit(scope.$index, scope.row)"
+            >编辑</el-button>
             <!-- <el-popconfirm title="是否删除此条数据?">
            
               </el-popconfirm> -->
-            <el-popconfirm confirm-button-text="好的" cancel-button-text="不用了" icon="el-icon-info" icon-color="red" title="这是一段内容确定删除吗？" @confirm="handleDelete(scope.$index, scope.row)">
-              <el-button size="mini" type="danger" slot="reference">删除</el-button>
+            <el-popconfirm
+              confirm-button-text="好的"
+              cancel-button-text="不用了"
+              icon="el-icon-info"
+              icon-color="red"
+              title="这是一段内容确定删除吗？"
+              @confirm="handleDelete(scope.$index, scope.row)"
+            >
+              <el-button
+                size="mini"
+                type="danger"
+                slot="reference"
+              >删除</el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1">
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page.sync="page"
+      :page-size="pageSize"
+      layout="total, prev, pager, next"
+      :total="totalArr.length - 1"
+    >
     </el-pagination>
-    <UpdateReceipt :isShow="isShow" :datas="selectData" :update="update" :type="type"></UpdateReceipt>
+    <UpdateReceipt
+      :isShow="isShow"
+      :datas="selectData"
+      :update="update"
+      :type="type"
+    ></UpdateReceipt>
   </div>
 </template>
 

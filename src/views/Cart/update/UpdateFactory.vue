@@ -1,97 +1,50 @@
 <template>
-  <el-dialog
-    :title="type"
-    :visible.sync="isShow"
-  >
-    <el-form
-      :model="datas"
-      ref="ruleForm"
-      :rules="rules"
-    >
+  <el-dialog :title="type" :visible.sync="isShow">
+    <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
-          <el-form-item
-            prop="fName"
-            label="厂家名称"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="fName" label="厂家名称" :label-width="formLabelWidth">
             <el-input v-model="datas.fName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="厂家所在省"
-            prop="fProvince"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.fProvince"></el-input>
+          <el-form-item label="客户所在省" prop="region" :label-width="formLabelWidth">
+            <el-cascader size="large" :options="provinceAndCityDataPlus" v-model="datas.region"></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="厂家所在市"
-            prop="fCity"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.fCity"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item
-            label="厂家详细地址"
-            prop="fAddress"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="厂家详细地址" prop="fAddress" :label-width="formLabelWidth">
             <el-input v-model="datas.fAddress"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="厂家联系人"
-            prop="fPerson"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="厂家联系人" prop="fPerson" :label-width="formLabelWidth">
             <el-input v-model="datas.fPerson"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="联系人手机"
-            prop="fPhone"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="联系人手机" prop="fPhone" :label-width="formLabelWidth">
             <el-input v-model="datas.fPhone"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="操作人"
-            :label-width="formLabelWidth"
-          >
-            <el-input
-              v-model="datas.operator"
-              :disabled="true"
-            ></el-input>
+          <el-form-item label="操作人" :label-width="formLabelWidth">
+            <el-input v-model="datas.operator" :disabled="true"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
     </el-form>
-    <div
-      slot="footer"
-      class="dialog-footer"
-    >
+    <div slot="footer" class="dialog-footer">
       <el-button @click="$parent.isShow = false">取 消</el-button>
-      <el-button
-        type="primary"
-        @click="update('ruleForm')"
-      >确 定</el-button>
+      <el-button type="primary" @click="update('ruleForm')">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
+import { provinceAndCityDataPlus, CodeToText } from 'element-china-area-data'
 import { mapGetters } from 'vuex'
 import { factory } from '@/api'
 export default {
@@ -134,7 +87,7 @@ export default {
 
 
       },
-
+      provinceAndCityDataPlus,
       form: {
 
       },
@@ -161,9 +114,15 @@ export default {
 
   methods: {
     send() {
-      const { $axios, datas, } = this;
+      const { $axios, datas } = this;
+      const { region } = datas;
+      let ctProvince = CodeToText[region[0]];
+      let ctCity = CodeToText[region[1]]
+
       datas.operator = this.user_info.user_name;
       datas.operatorDate = Date.now();
+      datas.fProvince = ctProvince
+      datas.fCity = ctCity;
 
       $axios.post(factory.addOrUpdate, { ...datas }).then(res => {
 

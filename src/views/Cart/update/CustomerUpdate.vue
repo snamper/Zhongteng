@@ -3,56 +3,37 @@
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
-          <el-form-item
-            prop="ctName"
-            label="客户名称"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="ctName" label="客户名称" :label-width="formLabelWidth">
             <el-input v-model="datas.ctName"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item
-            label="客户所在省"
-            prop="ctProvince"
-            :label-width="formLabelWidth"
-          >
+        <!-- <el-col :span="12">
+          <el-form-item label="客户所在省" prop="ctProvince" :label-width="formLabelWidth">
             <el-input v-model="datas.ctProvince"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="客户所在市"
-            prop="ctCity"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="客户所在市" prop="ctCity" :label-width="formLabelWidth">
             <el-input v-model="datas.ctCity"></el-input>
+          </el-form-item>
+        </el-col> -->
+        <el-col :span="12">
+          <el-form-item label="客户所在省" prop="region" :label-width="formLabelWidth">
+            <el-cascader size="large" :options="provinceAndCityDataPlus" v-model="datas.region"></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="客户详细地址"
-            prop="ctAddress"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="客户详细地址" prop="ctAddress" :label-width="formLabelWidth">
             <el-input v-model="datas.ctAddress"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="客户联系人"
-            prop="ctPerson"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="客户联系人" prop="ctPerson" :label-width="formLabelWidth">
             <el-input v-model="datas.ctPerson"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="联系人手机"
-            prop="psPhone"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="联系人手机" prop="psPhone" :label-width="formLabelWidth">
             <el-input v-model="datas.psPhone"></el-input>
           </el-form-item>
         </el-col>
@@ -88,6 +69,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { customer } from "@/api";
+import { provinceAndCityDataPlus, CodeToText } from 'element-china-area-data'
 export default {
   props: {
     isShow: {
@@ -129,6 +111,7 @@ export default {
           { required: true, message: "请输入联系人手机", trigger: "blur" },
         ],
       },
+      provinceAndCityDataPlus: provinceAndCityDataPlus,
 
       form: {},
       formLabelWidth: "120px",
@@ -136,8 +119,11 @@ export default {
   },
   computed: {
     ...mapGetters(["user_info"]),
+    // citys(s, c) {
+    //   return s + c;
+    // },
   },
-  created() {},
+  created() { },
   watch: {
     type: function (val) {
       if (val === "编辑") {
@@ -154,20 +140,24 @@ export default {
   methods: {
     send() {
       const { $axios, datas } = this;
+      const { region } = datas;
+      let ctProvince = CodeToText[region[0]];
+      let ctCity = CodeToText[region[1]]
+
       datas.operator = this.user_info.user_name;
       datas.operatorDate = Date.now();
-      $axios
-        .post(customer.addInfo, { ...datas })
-        .then((res) => {
-          if (res.data.errCode === 200) {
-            this.$message.success(res.data.msg);
-            this.$parent.getData();
-            this.$parent.isShow = false;
-          } else {
-            this.$message.error(res.data.msg);
-            this.$parent.isShow = false;
-          }
-        })
+      datas.ctProvince = ctProvince
+      datas.ctCity = ctCity;
+      $axios.post(customer.addInfo, { ...datas }).then((res) => {
+        if (res.data.errCode === 200) {
+          this.$message.success(res.data.msg);
+          this.$parent.getData();
+          this.$parent.isShow = false;
+        } else {
+          this.$message.error(res.data.msg);
+          this.$parent.isShow = false;
+        }
+      })
         .catch((e) => {
           this.$message.error(e);
           this.$parent.isShow = false;

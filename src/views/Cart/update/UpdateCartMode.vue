@@ -27,25 +27,8 @@
             <el-input v-model="datas.carSpec"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item
-            label="发动机号"
-            prop="engine"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.engine"></el-input>
-          </el-form-item>
-        </el-col>
+    
 
-        <el-col :span="12">
-          <el-form-item
-            label="厂家编码"
-            prop="factoryId"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.factoryId"></el-input>
-          </el-form-item>
-        </el-col>
         <el-col :span="12">
           <el-form-item
             label="厂家名称"

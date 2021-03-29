@@ -3,165 +3,76 @@
     <div class="params">
       <el-row>
         <el-col :span="18">
-          <el-input
-            v-model="searchValue"
-            placeholder="请输入车牌号"
-          ></el-input>
+          <el-input v-model="searchValue" placeholder="请输入车牌号"></el-input>
         </el-col>
         <el-col :span="6">
-          <el-button
-            type="primary"
-            @click="queryClick"
-          >查询</el-button>
+          <el-button type="primary" @click="queryClick">查询</el-button>
         </el-col>
 
       </el-row>
-      <el-button
-        type="primary"
-        @click="addCart"
-      >增加</el-button>
-      <el-button
-        type="danger"
-        @click="deletesHandle"
-      >批量删除</el-button>
+      <el-button type="primary" @click="addCart">增加</el-button>
+      <el-button type="danger" @click="deletesHandle">批量删除</el-button>
 
-      <download-excel
-        class="export-excel-wrapper"
-        :data="cartList"
-        :fields="json_fields"
-      >
+      <download-excel class="export-excel-wrapper" :data="cartList" :fields="json_fields">
         <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
-        <el-button
-          type="primary"
-          size="small"
-        >导出EXCEL</el-button>
+        <el-button type="primary" size="small">导出EXCEL</el-button>
       </download-excel>
 
     </div>
-    <el-table
-      :data="cartList"
-      style="width: 100%"
-      border
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-      >
+    <el-table :data="cartList" style="width: 100%" border @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column
-        prop="vin"
-        label="生产厂家"
-        width="180"
-      >
+      <el-table-column prop="vin" label="生产厂家" width="180">
       </el-table-column>
-      <el-table-column
-        prop="engine"
-        label="产品编码"
-        width="150"
-      >
+      <el-table-column prop="engine" label="产品编码" width="150">
       </el-table-column>
-      <el-table-column
-        prop="busbegdate"
-        label="产品名称"
-        width="200"
-      >
+      <el-table-column prop="busbegdate" label="产品名称" width="200">
 
         <template slot-scope="scope">
           {{scope.row.busbegdate|formatDate}}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="busenddate"
-        label="不含税单价"
-        width="200"
-      >
+      <el-table-column prop="busenddate" label="不含税单价" width="200">
         <template slot-scope="scope">
           {{scope.row.busenddate|formatDate}}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="trabegdate"
-        label="含税单价"
-        width="200"
-      >
+      <el-table-column prop="trabegdate" label="含税单价" width="200">
         <template slot-scope="scope">
           {{scope.row.trabegdate|formatDate}}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="traenddate"
-        label="单位"
-        width="200"
-      >
+      <el-table-column prop="traenddate" label="单位" width="200">
         <template slot-scope="scope">
           {{scope.row.traenddate|formatDate}}
         </template>
       </el-table-column>
 
-      <el-table-column
-        prop="status"
-        label="状态"
-      >
+      <el-table-column prop="status" label="状态">
       </el-table-column>
 
-      <el-table-column
-        prop="health"
-        label="备注"
-        width="500"
-      >
+      <el-table-column prop="health" label="备注" width="500">
         <template slot-scope="scope">
 
-          <el-input
-            type="textarea"
-            disabled
-            v-model="scope.row.remarks"
-          ></el-input>
+          <el-input type="textarea" disabled v-model="scope.row.remarks"></el-input>
         </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        fixed="right"
-        width="150"
-      >
+      <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)"
-          >编辑</el-button>
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <!-- <el-popconfirm title="是否删除此条数据?">
            
           </el-popconfirm> -->
-          <el-popconfirm
-            confirm-button-text='好的'
-            cancel-button-text='不用了'
-            icon="el-icon-info"
-            icon-color="red"
-            title="这是一段内容确定删除吗？"
-            @confirm='handleDelete(scope.$index, scope.row)'
-          >
-            <el-button
-              size="mini"
-              type="danger"
-              slot="reference"
-            >删除</el-button>
+          <el-popconfirm confirm-button-text='好的' cancel-button-text='不用了' icon="el-icon-info" icon-color="red" title="这是一段内容确定删除吗？" @confirm='handleDelete(scope.$index, scope.row)'>
+            <el-button size="mini" type="danger" slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
 
     </el-table>
-    <el-pagination
-      layout="prev, pager, next"
-      :total="cartList.length"
-      background
-    >
+    <el-pagination layout="prev, pager, next" :total="cartList.length" background>
     </el-pagination>
-    <update-cart
-      :isShow='isShow'
-      :selectData='selectData'
-      :update="update"
-      :type='type'
-    ></update-cart>
+    <update-cart :isShow='isShow' :selectData='selectData' :update="update" :type='type'></update-cart>
   </div>
 </template>
 

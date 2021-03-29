@@ -3,141 +3,59 @@
     <div class="params">
       <el-row>
         <el-col :span="18">
-          <el-input
-            v-model="searchValue"
-            placeholder="请输入厂家名称"
-          ></el-input>
+          <el-input v-model="searchValue" placeholder="请输入厂家名称"></el-input>
         </el-col>
         <el-col :span="6">
-          <el-button
-            type="primary"
-            @click="queryClick"
-          >查询</el-button>
+          <el-button type="primary" @click="queryClick">查询</el-button>
         </el-col>
 
       </el-row>
-      <el-button
-        type="primary"
-        @click="addCart"
-      >增加</el-button>
-      <el-button
-        type="danger"
-        @click="deletesAll"
-      >批量删除</el-button>
+      <el-button type="primary" @click="addCart">增加</el-button>
+      <el-button type="danger" @click="deletesAll">批量删除</el-button>
 
-      <download-excel
-        class="export-excel-wrapper"
-        :data="cartList"
-        :fields="json_fields"
-      >
+      <download-excel class="export-excel-wrapper" :data="cartList" :fields="json_fields">
         <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
-        <el-button
-          type="primary"
-          size="small"
-        >导出EXCEL</el-button>
+        <el-button type="primary" size="small">导出EXCEL</el-button>
       </download-excel>
 
     </div>
-    <el-table
-      :data="cartList"
-      style="width: 100%"
-      height="700" 
-      border
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-      >
+    <el-table :data="cartList" style="width: 100%" height="700" border @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column
-        prop="productId"
-        type="primary"
-        label="产品编码"
-        width="180"
-      >
+      <el-table-column prop="productId" type="primary" label="产品编码" width="180">
       </el-table-column>
-      <el-table-column
-        prop="pName"
-        label="产品名称"
-        width="150"
-      >
+      <el-table-column prop="pName" label="产品名称" width="150">
       </el-table-column>
 
-      <el-table-column
-        prop="factory"
-        label="生产厂家"
-        width="200"
-      >
+      <el-table-column prop="factory" label="生产厂家" width="200">
 
       </el-table-column>
-      <el-table-column
-        prop="pSpec"
-        label="产品规格"
-        width="200"
-      >
+      <el-table-column prop="pSpec" label="产品规格" width="200">
       </el-table-column>
 
-     
-      <el-table-column
-        prop="operator"
-        label="操作人"
-      >
+      <el-table-column prop="operator" label="操作人">
       </el-table-column>
-      <el-table-column
-        prop="operatorDate"
-        label="操作时间"
-        width="200"
-      >
+      <el-table-column prop="operatorDate" label="操作时间" width="200">
         <template slot-scope="scope">
-          {{scope.row.operatorDate|formatDate}}
+          {{scope.row.operatorDate|formatDate(true)}}
         </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        fixed="right"
-        width="150"
-      >
+      <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)"
-          >编辑</el-button>
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <!-- <el-popconfirm title="是否删除此条数据?">
            
           </el-popconfirm> -->
-          <el-popconfirm
-            confirm-button-text='好的'
-            cancel-button-text='不用了'
-            icon="el-icon-info"
-            icon-color="red"
-            title="这是一段内容确定删除吗？"
-            @confirm='handleDelete(scope.$index, scope.row)'
-          >
-            <el-button
-              size="mini"
-              type="danger"
-              slot="reference"
-            >删除</el-button>
+          <el-popconfirm confirm-button-text='好的' cancel-button-text='不用了' icon="el-icon-info" icon-color="red" title="这是一段内容确定删除吗？" @confirm='handleDelete(scope.$index, scope.row)'>
+            <el-button size="mini" type="danger" slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
 
     </el-table>
-    <el-pagination
-       @current-change="handleCurrentChange"
-      :current-page.sync="page"
-      :page-size="pageSize"
-      layout="total, prev, pager, next"
-      :total="totalArr.length-1"
-    >
+    <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length-1">
     </el-pagination>
-    <UpdateProduct
-      :isShow='isShow'
-      :datas='selectData'
-      :update="update"
-      :type='type'
-    ></UpdateProduct>
+    <UpdateProduct :isShow='isShow' :datas='selectData' :update="update" :type='type'></UpdateProduct>
   </div>
 </template>
 
@@ -243,7 +161,7 @@ export default {
         this.selectDelete = arr;
       }
     },
-     deletesHandle(params) {
+    deletesHandle(params) {
       if (params.length > 0) {
         this.$axios.post(product.delete, {
           productIds: params

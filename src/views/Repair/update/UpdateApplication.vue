@@ -240,7 +240,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { appExamine } from '@/api'
+import { applyInfo } from '@/api'
 export default {
   props: {
     isShow: {
@@ -304,7 +304,7 @@ export default {
       const { $axios, datas, } = this;
       datas.userId = this.user_info.user_id;
       datas.appTime = Date.now();
-      $axios.post(appExamine.addOrUpdate, { ...datas }).then(res => {
+      $axios.post(applyInfo.addOrUpdate, { ...datas }).then(res => {
 
         if (res.data.errCode === 200) {
           this.$message.success(res.data.msg)

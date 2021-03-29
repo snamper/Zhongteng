@@ -8,91 +8,171 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="保单号" prop="policyNum" :label-width="formLabelWidth">
+          <el-form-item
+            label="保单号"
+            prop="policyNum"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.policyNum"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="保险公司" prop="insuranceCp" :label-width="formLabelWidth">
+          <el-form-item
+            label="保险公司"
+            prop="insuranceCp"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.insuranceCp"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="联系人" prop="insPerson" :label-width="formLabelWidth">
+          <el-form-item
+            label="联系人"
+            prop="insPerson"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.insPerson"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="手机" prop="insPhone" :label-width="formLabelWidth">
+          <el-form-item
+            label="手机"
+            prop="insPhone"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.insPhone"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="商保开始日期" prop="busBegdate" :label-width="formLabelWidth">
-            <el-date-picker type="datetime" v-model="datas.busBegdate" placeholder="选择日期时间">
+          <el-form-item
+            label="商保开始日期"
+            prop="busBegdate"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              type="datetime"
+              v-model="datas.busBegdate"
+              placeholder="选择日期时间"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="商保截止日期" prop="busEnddate" :label-width="formLabelWidth">
-            <el-date-picker type="datetime" v-model="datas.busEnddate" placeholder="选择日期时间">
+          <el-form-item
+            label="商保截止日期"
+            prop="busEnddate"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              type="datetime"
+              v-model="datas.busEnddate"
+              placeholder="选择日期时间"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item prop="busCost" label="商保费用" :label-width="formLabelWidth">
+          <el-form-item
+            prop="busCost"
+            label="商保费用"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.busCost"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="交强险开始日" prop="traBegdate" :label-width="formLabelWidth">
-            <el-date-picker type="datetime" v-model="datas.traBegdate" placeholder="选择日期时间">
+          <el-form-item
+            label="交强险开始日"
+            prop="traBegdate"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              type="datetime"
+              v-model="datas.traBegdate"
+              placeholder="选择日期时间"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="交强险截止日" prop="traEnddate" :label-width="formLabelWidth">
-            <el-date-picker type="datetime" v-model="datas.traEnddate" placeholder="选择日期时间">
+          <el-form-item
+            label="交强险截止日"
+            prop="traEnddate"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              type="datetime"
+              v-model="datas.traEnddate"
+              placeholder="选择日期时间"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="交强险费用" prop="traCost" :label-width="formLabelWidth">
+          <el-form-item
+            label="交强险费用"
+            prop="traCost"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.traCost"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="出险单号" prop="acdtNum" :label-width="formLabelWidth">
+          <el-form-item
+            label="出险单号"
+            prop="acdtNum"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.acdtNum"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="出险日期" prop="acdtDate" :label-width="formLabelWidth">
-            <el-date-picker type="datetime" v-model="datas.acdtDate" placeholder="选择日期时间">
+          <el-form-item
+            label="出险日期"
+            prop="acdtDate"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              type="datetime"
+              v-model="datas.acdtDate"
+              placeholder="选择日期时间"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="出险费用" prop="acdtCost" :label-width="formLabelWidth">
+          <el-form-item
+            label="出险费用"
+            prop="acdtCost"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.acdtCost"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="保单图片" prop="policy" :label-width="formLabelWidth">
+          <el-form-item
+            label="保单图片"
+            prop="policy"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.policy"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="出险保单图片" prop="acdtPolicy" :label-width="formLabelWidth">
+          <el-form-item
+            label="出险保单图片"
+            prop="acdtPolicy"
+            :label-width="formLabelWidth"
+          >
             <el-input v-model="datas.acdtPolicy"></el-input>
           </el-form-item>
         </el-col>
-
+        
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">

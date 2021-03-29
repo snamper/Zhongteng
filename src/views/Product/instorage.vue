@@ -3,228 +3,97 @@
     <div class="params">
       <el-row>
         <el-col :span="18">
-          <el-input
-            v-model="searchValue"
-            placeholder="请输入厂家名称"
-          ></el-input>
+          <el-input v-model="searchValue" placeholder="请输入厂家名称"></el-input>
         </el-col>
         <el-col :span="6">
-          <el-button
-            type="primary"
-            @click="queryClick"
-          >查询</el-button>
+          <el-button type="primary" @click="queryClick">查询</el-button>
         </el-col>
 
       </el-row>
-      <el-button
-        type="primary"
-        @click="addCart"
-      >增加</el-button>
-      <el-button
-        type="danger"
-        @click="deletesAll"
-      >批量删除</el-button>
+      <el-button type="primary" @click="addCart">增加</el-button>
+      <el-button type="danger" @click="deletesAll">批量删除</el-button>
 
-      <download-excel
-        class="export-excel-wrapper"
-        :data="cartList"
-        :fields="json_fields"
-      >
+      <download-excel class="export-excel-wrapper" :data="cartList" :fields="json_fields">
         <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
-        <el-button
-          type="primary"
-          size="small"
-        >导出EXCEL</el-button>
+        <el-button type="primary" size="small">导出EXCEL</el-button>
       </download-excel>
 
     </div>
-    <el-table
-      :data="cartList"
-      style="width: 100%"
-      height="700" 
-      border
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-      >
+    <el-table :data="cartList" style="width: 100%" height="700" border @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column
-        prop="purchaseId"
-        type="primary"
-        label="入库编码"
-        width="100"
-      >
+      <el-table-column prop="purchaseId" type="primary" label="入库编码" width="100">
       </el-table-column>
-      <el-table-column
-        prop="purDate"
-        label="采购日期"
-        width="150"
-      >
-              <template slot-scope="scope">
+      <el-table-column prop="purDate" label="采购日期" width="150">
+        <template slot-scope="scope">
           {{scope.row.purDate|formatDate}}
         </template>
-      </el-table-column>      
-      <el-table-column
-        prop="storageDate"
-        label="入库日期"
-        width="150"
-      >
-              <template slot-scope="scope">
+      </el-table-column>
+      <el-table-column prop="storageDate" label="入库日期" width="150">
+        <template slot-scope="scope">
           {{scope.row.storageDate|formatDate}}
         </template>
-      </el-table-column>      
-      <el-table-column
-        prop="productId"
-        label="产品编码"
-        width="150"
-      >
-      </el-table-column>      
-      <el-table-column
-        prop="pName"
-        label="产品名称"
-        width="150"
-      >
-      </el-table-column>      
-      <el-table-column
-        prop="batchNum"
-        label="批号"
-        width="150"
-      >
-      </el-table-column>      
-      <el-table-column
-        prop="qty"
-        label="数量"
-        width="150"
-      >
-      </el-table-column>      
-      <el-table-column
-        prop="price"
-        label="单价"
-        width="150"
-      >
-      </el-table-column>      
-      <el-table-column
-        prop="totalPrice"
-        label="总价"
-        width="150"
-      >
-      </el-table-column>      
-      <el-table-column
-        prop="supplierId"
-        label="供应商编码"
-        width="150"
-      >
+      </el-table-column>
+      <el-table-column prop="productId" label="产品编码" width="150">
+      </el-table-column>
+      <el-table-column prop="pName" label="产品名称" width="150">
+      </el-table-column>
+      <el-table-column prop="batchNum" label="批号" width="150">
+      </el-table-column>
+      <el-table-column prop="qty" label="数量" width="150">
+      </el-table-column>
+      <el-table-column prop="price" label="单价" width="150">
+      </el-table-column>
+      <el-table-column prop="totalPrice" label="总价" width="150">
+      </el-table-column>
+      <el-table-column prop="supplierId" label="供应商编码" width="150">
       </el-table-column>
 
-      <el-table-column
-        prop="supplierName"
-        label="供应商名称"
-        width="200"
-      >
+      <el-table-column prop="supplierName" label="供应商名称" width="200">
 
       </el-table-column>
-      <el-table-column
-        prop="billNum"
-        label="单据编号"
-        width="200"
-      >
+      <el-table-column prop="billNum" label="单据编号" width="200">
       </el-table-column>
 
-     
-      <el-table-column
-        prop="operator"
-        label="操作人"
-      >
+      <el-table-column prop="operator" label="操作人">
       </el-table-column>
-      <el-table-column
-        prop="operatorDate"
-        label="操作时间"
-        width="200"
-      >
+      <el-table-column prop="operatorDate" label="操作时间" width="200">
         <template slot-scope="scope">
-          {{scope.row.operatorDate|formatDate}}
+          {{scope.row.operatorDate|formatDate(true)}}
         </template>
       </el-table-column>
 
-      <el-table-column
-        prop="empName"
-        label="审核人"
-        width="100"
-      >
+      <el-table-column prop="empName" label="审核人" width="100">
       </el-table-column>
 
-            <el-table-column
-        prop="result"
-        label="审核结果"
-        width="120"
-      >
+      <el-table-column prop="result" label="审核结果" width="120">
       </el-table-column>
 
-            <el-table-column
-        prop="opinion"
-        label="审核意见"
-        width="200"
-      >
+      <el-table-column prop="opinion" label="审核意见" width="200">
       </el-table-column>
 
-               <el-table-column
-        prop="exaTime"
-        label="审核时间"
-        width="120"
-      >
-              <template slot-scope="scope">
-          {{scope.row.exaTime|formatDate}}
+      <el-table-column prop="exaTime" label="审核时间" width="120">
+        <template slot-scope="scope">
+          {{scope.row.exaTime|formatDate(true)}}
         </template>
       </el-table-column>
 
-
-      <el-table-column
-        label="操作"
-        fixed="right"
-        width="150"
-      >
+      <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)"
-          >编辑</el-button>
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <!-- <el-popconfirm title="是否删除此条数据?">
            
           </el-popconfirm> -->
-          <el-popconfirm
-            confirm-button-text='好的'
-            cancel-button-text='不用了'
-            icon="el-icon-info"
-            icon-color="red"
-            title="这是一段内容确定删除吗？"
-            @confirm='handleDelete(scope.$index, scope.row)'
-          >
-            <el-button
-              size="mini"
-              type="danger"
-              slot="reference"
-            >删除</el-button>
+          <el-popconfirm confirm-button-text='好的' cancel-button-text='不用了' icon="el-icon-info" icon-color="red" title="这是一段内容确定删除吗？" @confirm='handleDelete(scope.$index, scope.row)'>
+            <el-button size="mini" type="danger" slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
 
     </el-table>
-    <el-pagination
-       @current-change="handleCurrentChange"
-      :current-page.sync="page"
-      :page-size="pageSize"
-      layout="total, prev, pager, next"
-      :total="totalArr.length-1"
-    >
+    <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length-1">
     </el-pagination>
-    <UpdateInstorage
-      :isShow='isShow'
-      :datas='selectData'
-      :update="update"
-      :type='type'
-    ></UpdateInstorage>
+    <UpdateInstorage :isShow='isShow' :datas='selectData' :update="update" :type='type'></UpdateInstorage>
   </div>
 </template>
 
@@ -342,7 +211,7 @@ export default {
         this.selectDelete = arr;
       }
     },
-     deletesHandle(params) {
+    deletesHandle(params) {
       if (params.length > 0) {
         this.$axios.post(instorage.delete, {
           purchaseIds: params

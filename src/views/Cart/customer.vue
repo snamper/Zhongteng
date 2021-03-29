@@ -2,8 +2,12 @@
   <div class="cart">
     <div class="params">
       <el-row>
-        <el-col :span="18">
+        <el-col :span="10">
           <el-input v-model="ctName" placeholder="请输入客户名称"></el-input>
+
+        </el-col>
+        <el-col :span="8">
+          <el-cascader size="large" :options="provinceAndCityDataPlus" v-model="selectOptions" @change="handleChange"></el-cascader>
         </el-col>
         <el-col :span="6">
           <el-button type="primary" @click="queryClick">查询</el-button>
@@ -34,18 +38,14 @@
       <el-table-column prop="psPhone" label="联系人手机" width="200">
       </el-table-column>
 
-      <el-table-column prop="serviceId" label="客户服务站编码" width="200">
-      </el-table-column>
-      <el-table-column prop="userId" label="我方负责人编码" width="200">
-      </el-table-column>
-      <el-table-column prop="empName" label="员工姓名" width="150">
+      <el-table-column prop="empName" label="负责人" width="150">
       </el-table-column>
       <el-table-column prop="operator" label="操作人" width="150">
       </el-table-column>
 
       <el-table-column prop="operatorDate" label="操作时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.operatorDate | formatDate }}
+          {{ scope.row.operatorDate | formatDate(true) }}
         </template>
       </el-table-column>
 
@@ -69,18 +69,20 @@
 <script>
 import { customer } from "@/api";
 import CustomerUpdate from "./update/CustomerUpdate";
-
+import { TextToCode, provinceAndCityDataPlus, CodeToText } from 'element-china-area-data'
 export default {
   data() {
     return {
       cartList: [],
-
+      provinceAndCityDataPlus: provinceAndCityDataPlus,//省市数据
+      selectOptions: '',//省市
       isShow: false,
       selectData: {}, //选中数据
       multipleSelection: [], //批量删除
       selectDelete: [], //单条删除
       type: "", //编辑&新增
       ctName: "", //搜索
+
       json_fields: {
         客户编码: "customerId",
         客户名称: "ctName",
@@ -106,10 +108,21 @@ export default {
   },
   methods: {
     getData() {
-      const { page, pageSize } = this;
+      const { page, pageSize, selectOptions } = this;
+      let arr = ['全部', '市辖区'];
+      let ctProvince = CodeToText[selectOptions[0]] ?? ''
+      let ctCity = CodeToText[selectOptions[1]] ?? ''
+      if (arr.includes(ctCity)) {
+        ctCity = ''
+      }
+      if (arr.includes(ctProvince)) {
+        ctProvince = ''
+      }
       this.$axios
         .post(customer.queryCustomerList, {
           ctName: this.ctName,
+          ctProvince,
+          ctCity
         })
         .then((res) => {
           console.log(res);
@@ -124,21 +137,24 @@ export default {
         });
     },
     handleEdit(index, row) {
+      let { ctProvince, ctCity } = row;
+      let cityCode = '';
+      let ctProvinceCode = ''
+
+      if (TextToCode[ctProvince]) {
+        ctProvinceCode = TextToCode[ctProvince].code;
+      }
+      if (TextToCode[ctProvince] && TextToCode[ctProvince][ctCity]) {
+        cityCode = TextToCode[ctProvince][ctCity].code
+      }
+      row.region = [ctProvinceCode, cityCode]
+
       this.selectData = { ...row };
+
       this.type = "编辑";
       this.isShow = true;
     },
-    //修改内容
-    update() {
-      //   this.$axios.post(cartApi.updateCarInfo, { ...value }).then(res => {
-      //     const data = res.data;
-      //     if (data.errCode == 200) {
-      //       this.getData()
-      //     } else {
-      //       this.$message(data.msg)
-      //     }
-      //   })
-    },
+
     //查询内容
     queryClick() {
       if (this.ctName == "") {
