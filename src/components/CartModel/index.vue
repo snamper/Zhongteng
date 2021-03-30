@@ -26,19 +26,18 @@
       </el-table-column>
       <el-table-column prop="carSpec" label="规格" width="180">
       </el-table-column>
-     
+
       <el-table-column prop="carName" label="车型名称" width="250">
       </el-table-column>
 
       <el-table-column prop="fName" label="厂家名称" width="200">
       </el-table-column>
-      <el-table-column prop="remark" label="备注">
-      </el-table-column>
+      <el-table-column prop="remark" label="备注"> </el-table-column>
 
       <el-table-column prop="operator" label="操作人"> </el-table-column>
       <el-table-column prop="operatorDate" label="操作时间" width="200">
         <template slot-scope="scope">
-          {{ scope.row.operatorDate | formatDate }}
+          {{ scope.row.operatorDate | formatDate(true) }}
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
@@ -95,9 +94,7 @@ export default {
       selectData: {},
       searchValue: "",
       multipleSelection: [],
-
       type: "",
-
       carId: [],
     };
   },

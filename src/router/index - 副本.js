@@ -76,18 +76,6 @@ export const routes = [
         },
       },
       {
-        path: '/cart/service',
-        name: 'Cartservice',
-        component: () =>
-          import(
-            /* webpackChunkName: "CartIndex" */ '../views/Cart/service.vue'
-          ),
-        meta: {
-          title: '维修服务站信息',
-          icon: 'el-icon-s-marketing',
-        },
-      },
-      {
         path: '/cart/factory',
         name: 'Cartfactory',
         component: () =>
@@ -95,30 +83,8 @@ export const routes = [
             /* webpackChunkName: "CartIndex" */ '../views/Cart/factory.vue'
           ),
         meta: {
-          title: '主机厂管理',
+          title: '厂家管理',
           icon: 'el-icon-s-marketing',
-        },
-      },
-      {
-        path: '/cart/insurance',
-        name: 'CartInsurance',
-        component: () =>
-          import(
-            /* webpackChunkName: "CartIndex" */ '../views/Cart/insurance.vue'
-          ),
-        meta: {
-          title: '保险管理',
-          icon: 'el-icon-s-marketing',
-        },
-      },
-      {
-        path: '/cart/rent',
-        name: 'Cartrent',
-        component: () =>
-          import(/* webpackChunkName: "HomeIndex" */ '../views/Cart/rent.vue'),
-        meta: {
-          title: '租金管理',
-          icon: 'el-icon-s-shop',
         },
       },
     ],
@@ -129,43 +95,29 @@ export const routes = [
     redirect: '/repair/index',
     component: Layout,
     meta: {
-      title: '维修管理',
+      title: '维修审核',
       icon: 'el-icon-s-comment',
     },
     children: [
       {
-        path: '/repair/application',
-        name: 'RepairApplication',
-        component: () =>
-          import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Repair/application.vue'
-          ),
-        meta: {
-          title: '维修审核',
-          icon: 'el-icon-s-shop',
-        },
-      },
-      {
-        path: '/repair/receipt',
+        path: '/repair/index',
         name: 'RepairIndex',
         component: () =>
           import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Repair/receipt.vue'
+            /* webpackChunkName: "HomeIndex" */ '../views/Repair/index.vue'
           ),
         meta: {
-          title: '回执审核',
+          title: '信息初审',
           icon: 'el-icon-s-shop',
         },
       },
       {
-        path: '/repair/count',
+        path: '/repair/info',
         name: 'UserIndex',
         component: () =>
-          import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Repair/count.vue'
-          ),
+          import(/* webpackChunkName: "HomeIndex" */ '../views/Info/index.vue'),
         meta: {
-          title: '维修汇总',
+          title: '信息复审',
         },
       },
     ],
@@ -182,116 +134,42 @@ export const routes = [
     children: [
       {
         path: '/order/index',
-        name: 'OrderIndex-',
+        name: 'OrderIndex',
         component: () =>
           import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Order/order.vue'
+            /* webpackChunkName: "HomeIndex" */ '../views/Order/index.vue'
           ),
         meta: {
-          title: '车辆订单管理',
+          title: '车辆交付',
           icon: 'el-icon-s-shop',
         },
       },
       {
-        path: '/order/deliver',
-        name: 'Orderdeliver',
+        path: '/order/money',
+        name: 'Ordermoney',
         component: () =>
           import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Order/deliver.vue'
+            /* webpackChunkName: "HomeIndex" */ '../views/Order/money.vue'
           ),
         meta: {
-          title: '车辆交付管理',
+          title: '租金管理',
           icon: 'el-icon-s-shop',
         },
       },
       {
-        path: '/order/total',
-        name: 'Ordertotal',
+        path: '/order/other',
+        name: 'Orderother',
         component: () =>
           import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Order/total.vue'
+            /* webpackChunkName: "HomeIndex" */ '../views/Order/other.vue'
           ),
         meta: {
-          title: '交付信息统计',
+          title: '其他',
           icon: 'el-icon-s-shop',
-        },
-      },
-      {
-        path: '/order/test',
-        name: 'Ordertest',
-        component: () =>
-          import(
-            /* webpackChunkName: "HomeIndex" */ '../views/Order/test.vue'
-          ),
-        meta: {
-          title: '测试',
-          icon: 'el-icon-s-shop',
-        },
-      },
-      
-    ],
-  },
-  {
-    path: '/product',
-    name: 'product',
-    redirect: '/product/index',
-    component: Layout,
-    meta: {
-      title: '配件管理',
-      icon: 'el-icon-s-marketing',
-    },
-    children: [
-      {
-        path: '/product/product',
-        name: 'ProductProduct',
-        component: () =>
-          import(
-            /* webpackChunkName: "ProductIndex" */ '../views/Product/product.vue'
-          ),
-        meta: {
-          title: '配件档案信息',
-          icon: 'el-icon-s-marketing',
-        },
-      },
-      {
-        path: '/product/instorage',
-        name: 'ProductInstorage',
-        component: () =>
-          import(
-            /* webpackChunkName: "ProductIndex" */ '../views/Product/instorage.vue'
-          ),
-        meta: {
-          title: '入库管理',
-          icon: 'el-icon-s-marketing',
-        },
-      },
-      {
-        path: '/product/outstorage',
-        name: 'Productoutstorage',
-        component: () =>
-          import(
-            /* webpackChunkName: "ProductIndex" */ '../views/Product/outstorage.vue'
-          ),
-        meta: {
-          title: '出库管理',
-          icon: 'el-icon-s-marketing',
-        },
-      },
-      {
-        path: '/product/stock',
-        name: 'Productstock',
-        component: () =>
-          import(
-            /* webpackChunkName: "ProductIndex" */ '../views/Product/stock.vue'
-          ),
-        meta: {
-          title: '库存管理',
-          icon: 'el-icon-s-marketing',
         },
       },
     ],
   },
-
   {
     path: '/datasys',
     name: 'Datasys',
@@ -319,7 +197,7 @@ export const routes = [
   {
     path: '/user',
     name: 'User',
-    redirect: '/user/index',
+    redirect: '/role/index',
     component: Layout,
     meta: {
       title: '系统管理',
@@ -327,17 +205,7 @@ export const routes = [
     },
     children: [
       {
-        path: '/user/index',
-        name: 'UserIndex',
-        component: () =>
-          import(/* webpackChunkName: "HomeIndex" */ '../views/User/index.vue'),
-        meta: {
-          title: '账户管理',
-          icon: 'el-icon-s-tools',
-        },
-      },
-      {
-        path: '/user/role',
+        path: '/role/index',
         name: 'RoleIndex',
         component: () =>
           import(/* webpackChunkName: "HomeIndex" */ '../views/Role/index.vue'),
@@ -347,12 +215,12 @@ export const routes = [
         },
       },
       {
-        path: '/user/info',
-        name: 'RoleIndex',
+        path: '/user/index',
+        name: 'UserIndex',
         component: () =>
-          import(/* webpackChunkName: "HomeIndex" */ '../views/User/info.vue'),
+          import(/* webpackChunkName: "HomeIndex" */ '../views/User/index.vue'),
         meta: {
-          title: '日志管理',
+          title: '用户管理',
           icon: 'el-icon-s-tools',
         },
       },

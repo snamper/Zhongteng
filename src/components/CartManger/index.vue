@@ -28,9 +28,16 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column fixed prop="carId" label="车辆编码" width="80" align="center">
+      <el-table-column
+        fixed
+        prop="carId"
+        label="车辆编码"
+        width="80"
+        align="center"
+      >
       </el-table-column>
-      <el-table-column fixed prop="vin" label="车架号" width="180"> </el-table-column>
+      <el-table-column fixed prop="vin" label="车架号" width="180">
+      </el-table-column>
       <el-table-column prop="engine" label="发动机号" width="150">
       </el-table-column>
       <el-table-column prop="carNumber" label="车牌号" width="150">
@@ -120,12 +127,14 @@
           {{ scope.row.deliveryDate | formatDate }}
         </template>
       </el-table-column>
+
       <el-table-column prop="operator" label="操作人"> </el-table-column>
-      <el-table-column prop="operatorDate" label="操作时间" width="150">
+      <el-table-column prop="operatorDate" label="操作时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.operatorDate | formatDate }}
+          {{ scope.row.operatorDate | formatDate(true) }}
         </template>
       </el-table-column>
+      
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
@@ -180,21 +189,19 @@ export default {
       selectData: {},
       searchValue: "",
       multipleSelection: [],
-
       type: "",
       json_fields: {
         车辆id: "carId",
         车架号: "vin",
         发动机号: "engine",
+        车型名称: "carName",
         车牌号: "carNumber",
         上牌日期: "regDate",
         客户编码: "customerId",
-
         客户名称: "ctName",
         主机厂编码: "fName",
         年检日期: "motDate",
         注册日期: "registerdate",
-
         交付状态: {
           field: "delStatus",
           callback: (value) => {

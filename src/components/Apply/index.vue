@@ -37,11 +37,10 @@
       </el-table-column>
       <el-table-column prop="vin" label="车架号" width="180"> </el-table-column>
 
-       <el-table-column prop="ctName" label="客户名称" width="150">
+      <el-table-column prop="ctName" label="客户名称" width="150">
       </el-table-column>
       <el-table-column prop="category" label="维修类别" width="100">
       </el-table-column>
-     
 
       <el-table-column
         prop="troublePic"
@@ -78,13 +77,22 @@
           <el-input type="text" disabled v-model="scope.row.remarks"></el-input>
         </template>
       </el-table-column>
-
+<!-- 
       <el-table-column prop="userId" label="申请人"> </el-table-column>
       <el-table-column prop="operatorDate" label="申请时间" width="200">
         <template slot-scope="scope">
           {{ scope.row.operatorDate | formatDate }}
         </template>
+      </el-table-column> -->
+
+      <el-table-column prop="userId" label="申请人"> </el-table-column>
+      <el-table-column prop="appTime" label="操作时间" width="180">
+        <template slot-scope="scope">
+          {{ scope.row.appTime | formatDate(true) }}
+        </template>
       </el-table-column>
+
+
       <el-table-column label="操作" fixed="right" width="200">
         <template slot-scope="scope">
           <el-button

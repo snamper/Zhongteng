@@ -55,17 +55,7 @@
       </el-table-column>
       <el-table-column prop="traCost" label="交强险费用" width="100">
       </el-table-column>
-      <el-table-column prop="acdtNum" label="出险单号"> </el-table-column>
-      <el-table-column prop="acdtDate" label="出险日期" width="120">
-        <template slot-scope="scope">
-          {{ scope.row.acdtDate | formatDate }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="acdtCost" label="出险费用"> </el-table-column>
-      <el-table-column prop="policy" label="保单图片" width="120">
-      </el-table-column>
-      <el-table-column prop="acdtPolicy" label="出险单图片" width="120">
-      </el-table-column>
+
       <el-table-column prop="insOperator" label="操作人" width="150">
       </el-table-column>
       <el-table-column prop="insOptdate" label="操作时间" width="180">
@@ -118,11 +108,7 @@ export default {
         交强险开始日期: "traBegdate",
         交强险截止日期: "traEnddate",
         交强险费用: "traCost",
-        出险单号: "acdtNum",
-        出险日期: "acdtDate",
-        出险费用: "acdtCost",
-        保单图片: "policy",
-        出险保单图片: "acdtPolicy",
+
         操作人: "insOperator",
         操作时间: "insOptdate",
       },

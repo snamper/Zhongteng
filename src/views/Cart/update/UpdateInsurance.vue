@@ -120,59 +120,7 @@
             <el-input v-model="datas.traCost"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item
-            label="出险单号"
-            prop="acdtNum"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.acdtNum"></el-input>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="12">
-          <el-form-item
-            label="出险日期"
-            prop="acdtDate"
-            :label-width="formLabelWidth"
-          >
-            <el-date-picker
-              type="datetime"
-              v-model="datas.acdtDate"
-              placeholder="选择日期时间"
-            >
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="12">
-          <el-form-item
-            label="出险费用"
-            prop="acdtCost"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.acdtCost"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item
-            label="保单图片"
-            prop="policy"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.policy"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item
-            label="出险保单图片"
-            prop="acdtPolicy"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.acdtPolicy"></el-input>
-          </el-form-item>
-        </el-col>
-        
+       
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -237,21 +185,6 @@ export default {
         ],
         traCost: [
           { required: true, message: "请输入交强险费用", trigger: "blur" },
-        ],
-        acdtNum: [
-          { required: false, message: "请输入出险单号", trigger: "blur" },
-        ],
-        acdtDate: [
-          { required: false, message: "请输入出险日期", trigger: "blur" },
-        ],
-        acdtCost: [
-          { required: false, message: "请输入出险费用", trigger: "blur" },
-        ],
-        policy: [
-          { required: false, message: "请输入保单图片", trigger: "blur" },
-        ],
-        acdtPolicy: [
-          { required: false, message: "请输入出险保单图片", trigger: "blur" },
         ],
       },
 

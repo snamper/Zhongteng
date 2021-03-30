@@ -26,23 +26,63 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="客户名称">
-                <el-input v-model="selectData.ctName"></el-input>
+              <el-form-item label="车型名称">
+                <el-select v-model="selectData.carName" filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in cartModel"
+                    :key="item.value"
+                    :label="item.carName"
+                    :value="item.carName"
+                  >
+                  </el-option>
+                  </el-select>
               </el-form-item>
             </el-col>
+
+            <el-col :span="12">
+              <el-form-item label="客户名称">
+                <el-select v-model="selectData.ctName" filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in cartCustomer"
+                    :key="item.value"
+                    :label="item.ctName"
+                    :value="item.ctName"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            
             <el-col :span="12">
               <el-form-item label="主机厂名称">
-                <el-input v-model="selectData.fName"></el-input>
+                <el-select v-model="selectData.fName" filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in cartFactory"
+                    :key="item.value"
+                    :label="item.fName"
+                    :value="item.fName"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
+
             <el-col :span="12">
               <el-form-item label="单日租金">
                 <el-input v-model="selectData.carRent"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="车辆订单编码">
-                <el-input v-model="selectData.orderId"></el-input>
+              <el-form-item label="车辆订单编码">           
+                <el-select v-model="selectData.orderId" filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in cartOrder"
+                    :key="item.value"
+                    :label="item.orderId"
+                    :value="item.orderId"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
 
@@ -202,11 +242,17 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { order,customer,cartModel,factory} from "@/api";
+
 export default {
   name: "updateCart",
   data() {
     return {
       datas: {},
+      cartFactory: [],
+      cartModel: [],
+      cartOrder: [],
+      cartCustomer: [],
       jStatus: [
         {
           value: "0",
@@ -228,6 +274,12 @@ export default {
         },
       ],
     };
+  },
+  created() {
+    this.getDataFactory();
+    this.getDataCarType();
+    this.getDataOrder();
+    this.getDataCustomer();
   },
   props: {
     isShow: {
@@ -263,6 +315,58 @@ export default {
         this.$parent.addCartClick(this.selectData);
       }
     },
+    getDataFactory() {
+      this.$axios.post(factory.query, { vin: this.searchValue }).then((res) => {
+        const data = res.data;
+        if (data.errCode == 200) {
+          this.cartFactory = this.paging(this.page, this.pageSize, data.data);
+          this.totalArr = data.data;
+          this.type = "";
+        } else {
+          this.$message(data.msg);
+        }
+      });
+    },
+    getDataCarType() {
+      const { page, pageSize } = this;
+      this.$axios
+        .post(cartModel.query, { carName: this.searchValue })
+        .then((res) => {
+          const data = res.data;
+          if (data.errCode == 200) {
+            this.cartModel = this.paging(page, pageSize, data.data);
+            this.totalArr = data.data;
+            this.type = "";
+          } else {
+            this.$message(data.msg);
+          }
+        });
+    },
+    getDataOrder() {
+      this.$axios.post(order.query, { vin: this.searchValue }).then((res) => {
+        const data = res.data;
+        if (data.errCode == 200) {
+          this.cartOrder = this.paging(this.page, this.pageSize, data.data);
+          this.totalArr = data.data;
+          this.type = "";
+        } else {
+          this.$message(data.msg);
+        }
+      });
+    },
+    getDataCustomer() {     
+      this.$axios.post(customer.queryCustomerList, {ctName: this.ctName,}).then((res) => {
+          const data = res.data;
+          if (data.errCode == 200) {
+            this.cartCustomer = this.paging(this.page, this.pageSize, data.data);
+            this.totalArr = data.data;
+            this.type = "";
+          } else {
+            this.$message(data.msg);
+          }
+        });
+    },
+
   },
 };
 </script>

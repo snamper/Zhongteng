@@ -22,19 +22,19 @@
     <el-table :data="cartList" style="width: 100%" height="700" border @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column prop="factoryId" type="primary" label="厂家编码" width="180">
+      <el-table-column prop="factoryId" type="primary" label="厂家编码" width="100">
       </el-table-column>
       <el-table-column prop="fName" label="厂家名称" width="150">
       </el-table-column>
 
-      <el-table-column prop="fProvince" label="厂家所在省" width="200">
+      <el-table-column prop="fProvince" label="厂家所在省" width="100">
 
       </el-table-column>
-      <el-table-column prop="fCity" label="厂家所在市" width="200">
+      <el-table-column prop="fCity" label="厂家所在市" width="100">
 
       </el-table-column>
 
-      <el-table-column prop="fAddress" label="厂家详细地址">
+      <el-table-column prop="fAddress" label="厂家详细地址" width="250">
       </el-table-column>
 
       <el-table-column prop="fPerson" label="厂家联系人" width="100">

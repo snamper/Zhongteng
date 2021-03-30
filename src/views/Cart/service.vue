@@ -33,9 +33,9 @@
       <el-table-column prop="sDepartment" label="部门"> </el-table-column>
       <el-table-column prop="sPhone" label="联系方式" width="120"> </el-table-column>
       <el-table-column prop="operator" label="操作人"> </el-table-column>
-      <el-table-column prop="operatorDate" label="操作时间" width="200">
+      <el-table-column prop="operatorDate" label="操作时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.operatorDate | formatDate }}
+          {{ scope.row.operatorDate | formatDate(true) }}
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
