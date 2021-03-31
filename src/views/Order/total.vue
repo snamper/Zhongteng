@@ -1,31 +1,23 @@
 <template>
   <div class="data-sys">
     <div class="params">
-      <div class="block">
-        <span class="demonstration"></span>
-        <el-cascader
-          size="large"
-          :options="provinOptions"
-          v-model="selectedOptions"
-          @change="handleChange"
-        >
-        </el-cascader>
+      <div class="time">
+        <el-date-picker v-model="time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+        </el-date-picker>
       </div>
+      <echarts-box :options="option1" id="data-echarts1"></echarts-box>
 
     </div>
 
     <div class="left">
-      <echarts-box
-        :options="options"
-        id="data-echarts"
-      ></echarts-box>
+      <echarts-box :options="options" id="data-echarts"></echarts-box>
     </div>
   </div>
 </template>
 
 <script>
 import { customer } from "@/api";
-import { provinceAndCityDataPlus, CodeToText } from 'element-china-area-data'
+
 import * as echarts from "echarts";
 const data = [220, 182, 191, 234, 290, 330, 310];
 
@@ -169,102 +161,188 @@ const option = {
     },
   ],
 };
+var xData = function () {
+  var data = [];
+  for (var i = 2; i < 8; i++) {
+    data.push(i + "月");
+  }
+  return data;
+}();
 
+var option1 = {
+  title: {
+    text: "区域统计",
+    left: "center",
+
+  },
+  "tooltip": {
+    "trigger": "axis",
+    "axisPointer": {
+      "type": "shadow",
+      textStyle: {
+        color: "#333"
+      }
+
+    },
+  },
+  "grid": {
+    "borderWidth": 0,
+    "top": 50,
+    "bottom": 50,
+    left: 0,
+    right: 0,
+    containLabel: true,
+    textStyle: {
+      color: "#333"
+    }
+  },
+  "calculable": true,
+  "xAxis": [{
+    "type": "category",
+    axisLine: {
+      lineStyle: {
+        color: "#ccc",
+      },
+    },
+
+
+    "axisLabel": {
+      "interval": 0,
+      color: '#333',
+
+    },
+    "data": xData,
+  }],
+  "yAxis": [{
+    "type": "value",
+    show: true,
+    //坐标值标注
+    axisLabel: {
+      show: true,
+      textStyle: {
+        color: "#333",
+      },
+    },
+    //分格线
+    splitLine: {
+      lineStyle: {
+        color: "#ccc",
+      },
+    },
+    axisLine: {
+      show: true,
+      lineStyle: {
+        color: "#ccc",
+      },
+    },
+  }],
+  "series": [{
+    "name": "女",
+    "type": "bar",
+    "stack": "总量",
+    "barMaxWidth": 35,
+    "barGap": "10%",
+    "itemStyle": {
+      "normal": {
+        "color":
+        {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [{
+            offset: 0,
+            color: '#17AAFE' // 0% 处的颜色
+          }, {
+            offset: 1,
+            color: '#17AAFE' // 100% 处的颜色
+          }],
+          global: false // 缺省为 false
+        }
+      }
+    },
+    "data": [
+      709,
+      1917,
+      2455,
+      2610,
+      1719,
+      1433
+    ],
+  },
+
+  {
+    "name": "男",
+    "type": "bar",
+    "stack": "总量",
+    "itemStyle": {
+      "normal": {
+        "color": {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [{
+            offset: 0,
+            color: 'rgba(0,222,255,1)' // 0% 处的颜色
+          }, {
+            offset: 1,
+            color: 'rgba(0,222,255,1)' // 100% 处的颜色
+          }],
+          global: false // 缺省为 false
+        },
+        "barBorderRadius": 0
+      }
+    },
+    "data": [
+      327,
+      1776,
+      507,
+      1200,
+      800,
+      482
+    ]
+  }, {
+    "name": "总数",
+    "type": "line",
+
+    symbol: 'none',
+
+    lineStyle: {
+      color: '#3275FB',
+      width: 4,
+      shadowColor: 'rgba(0, 0, 0, 0.3)',//设置折线阴影
+      shadowBlur: 15,
+      shadowOffsetY: 20,
+    },
+    "data": [
+      1036,
+      3693,
+      2962,
+      3810,
+      2519,
+      1915
+    ]
+  },
+  ]
+}
 export default {
   name: "dataSys",
   data() {
     return {
       options: option,
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-        ],
-      },
-      value1: '',
-      value2: '',
-      json_fields: {
-        客户编码: "customerId",
-        客户名称: "ctName",
-        客户所在省: "ctProvince",
-        客户所在市: "ctCity",
-        客户详细地址: "ctAddress",
-        客户联系人: "ctPerson",
-        联系人手机: "psPhone",
-        客户服务站编码: "serviceId",
-        我方负责人编码: "userId",
-        员工姓名: "empName",
-        操作人: "operator",
-        操作时间: "operatorDate",
-      },
-      provinOptions: provinceAndCityDataPlus,
-      selectedOptions: []
+      option1: option1,
+      time: ''
     };
   },
   created() {
-    this.getData();
+
   },
   methods: {
-    getData() {
-      const { page, pageSize } = this;
-      this.$axios
-        .post(customer.queryCustomerList, {
-          ctName: this.ctName,
-        })
-        .then((res) => {
-          console.log(res);
-          const data = res.data;
-          if (data.errCode == 200) {
-            this.cartList = this.paging(page, pageSize, data.data);
-            this.totalArr = data.data;
-            this.type = "";
-          } else {
-            this.$message(data.msg);
-          }
-        });
-    },
-    //查询内容
-    queryClick() {
-      if (this.ctName == "") {
-        this.getData();
-      } else {
-        this.getData();
-      }
-    },
-    handleChange(value) {
-      console.log(value)
-      let codeArr = []
-      value.forEach(item => {
-        let codeCity = CodeToText[item]
-        codeArr.push(codeCity)
-      })
-      console.log(codeArr)
-    }
+
+
   },
 };
 </script>
@@ -276,6 +354,15 @@ export default {
   & > div {
     width: 50%;
     height: 420px;
+  }
+  .params {
+    position: relative;
+    .time {
+      position: absolute;
+      top: -5px;
+      left: 12px;
+      z-index: 1000;
+    }
   }
 }
 </style>

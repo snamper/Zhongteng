@@ -13,7 +13,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="车架号" prop="vin" :label-width="formLabelWidth">
-            <el-input v-model="datas.vin" :disabled="true"></el-input>
+            <el-input v-model="datas.vin" :disabled="false"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -33,15 +33,37 @@
             </el-select>
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
           <el-form-item
-            label="预估工时"
-            prop="workHours"
+            label="客户名称"
             :label-width="formLabelWidth"
+            prop="ctName"
           >
-            <el-input v-model="datas.workHours"></el-input>
+            <el-input v-model="datas.ctName"></el-input>
           </el-form-item>
         </el-col>
+
+        <el-col :span="12">
+          <el-form-item 
+          :label-width="formLabelWidth"
+          label="服务站">
+            <el-select
+              v-model="datas.cName"
+              filterable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in cartServices"
+                :key="item.sName"
+                :label="item.sName"
+                :value="item.sName"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+
         <el-col :span="12">
           <el-form-item
             label="预估人工费"
@@ -79,39 +101,12 @@
             <el-input v-model="datas.product3"></el-input>
           </el-form-item>
         </el-col>
-
-        <el-col :span="12">
-          <el-form-item
-            label="客户名称"
-            :label-width="formLabelWidth"
-            prop="ctName"
-          >
-            <el-input v-model="datas.ctName"></el-input>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="12">
-          <el-form-item
-            label="服务站名称"
-            :label-width="formLabelWidth"
-            prop="cName"
-          >
-            <el-input v-model="datas.cName"></el-input>
-          </el-form-item>
-        </el-col>
-
-        <!-- <el-col :span="12">
-          <el-form-item label="申请人" :label-width="formLabelWidth">
-            <el-input v-model="datas.userId" :disabled="true"></el-input>
-          </el-form-item>
-        </el-col> -->
-
         <el-table-column prop="operator" label="申请人"> </el-table-column>
-      <el-table-column prop="operatorDate" label="操作时间" width="180">
-        <template slot-scope="scope">
-          {{ scope.row.operatorDate | formatDate(true) }}
-        </template>
-      </el-table-column>
+        <el-table-column prop="operatorDate" label="操作时间" width="180">
+          <template slot-scope="scope">
+            {{ scope.row.operatorDate | formatDate(true) }}
+          </template>
+        </el-table-column>
 
         <el-col :span="12">
           <el-form-item
@@ -125,7 +120,6 @@
           </el-form-item>
         </el-col>
 
-
         <el-col :span="12">
           <el-form-item label="故障图片" :label-width="formLabelWidth">
             <el-upload class="avatar-uploader" :show-file-list="false">
@@ -134,6 +128,16 @@
             </el-upload>
           </el-form-item>
         </el-col>
+
+       <el-col :span="12">
+          <el-form-item label="费用预估单" :label-width="formLabelWidth">
+            <el-upload class="avatar-uploader" :show-file-list="false">
+              <img v-if="imageUrl" :src="datas.workHours" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -145,7 +149,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { applyInfo } from "@/api";
+import { applyInfo, services } from "@/api";
 export default {
   props: {
     isShow: {
@@ -160,9 +164,15 @@ export default {
       type: Object,
     },
   },
-
+  computed: {
+    ...mapGetters(["user_info"]),
+    title() {
+      return this.type == "编辑" ? "编辑车辆信息" : "添加车辆信息";
+    },
+  },
   data() {
     return {
+      cartServices: [],
       rules: {
         ctName: [
           { required: true, message: "请输入客户名称", trigger: "blur" },
@@ -171,7 +181,6 @@ export default {
           { required: true, message: "请输入服务站名称", trigger: "blur" },
         ],
       },
-
       options: [
         {
           value: "维修",
@@ -185,10 +194,9 @@ export default {
       formLabelWidth: "120px",
     };
   },
-  computed: {
-    ...mapGetters(["user_info"]),
-  },
+
   created() {
+    this.getDataServices();
     console.log(this.user_info.user_id);
   },
   watch: {
@@ -202,10 +210,24 @@ export default {
   },
 
   methods: {
+    getDataServices() {
+      this.$axios
+        .post(services.query, { sName: this.searchValue })
+        .then((res) => {
+          const data = res.data;
+          if (data.errCode == 200) {
+            this.cartServices = this.paging(this.page, this.pageSize, data.data);
+            this.totalArr = data.data;
+            this.type = "";
+          } else {
+            this.$message(data.msg);
+          }
+        });
+    },
     send() {
       const { $axios, datas } = this;
-      datas.userId = this.user_info.user_id;
-      datas.appTime = Date.now();
+      datas.operator = this.user_info.user_name;
+      datas.operatorDate = Date.now();
       $axios
         .post(applyInfo.addOrUpdate, { ...datas })
         .then((res) => {

@@ -1,13 +1,20 @@
 <template>
-  <div>审核失败</div>
+  <ApplyComm :filterType="filterType" />
 </template>
 
 <script>
+import ApplyComm from '@/components/ApplyComm'
 export default {
-
+  components: {
+    ApplyComm
+  },
+  data() {
+    return {
+      filterType: 'fail'
+    }
+  },
 }
 </script>
 
 <style>
-
 </style>

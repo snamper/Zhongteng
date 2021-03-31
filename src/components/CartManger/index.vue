@@ -42,14 +42,14 @@
       </el-table-column>
       <el-table-column prop="carNumber" label="车牌号" width="150">
       </el-table-column>
-      <el-table-column prop="carName" label="车型" width="150">
+      <el-table-column prop="carName" label="车型" width="200">
       </el-table-column>
       <el-table-column prop="regDate" label="上牌日期" width="150">
         <template slot-scope="scope">
           {{ scope.row.regDate | formatDate }}
         </template>
       </el-table-column>
-      <el-table-column prop="" label="购车发票" width="200" align="center">
+      <el-table-column prop="" label="购车发票" width="120" align="center">
         <template slot-scope="scope">
           <el-image
             :src="scope.row.invoice"
@@ -65,7 +65,7 @@
       <el-table-column prop="fName" label="主机厂" width="100">
       </el-table-column>
 
-      <el-table-column prop="motDate" label="年检日期" width="200">
+      <el-table-column prop="motDate" label="年检日期" width="150">
         <template slot-scope="scope">
           {{ scope.row.registerdate | formatDate }}
         </template>
@@ -171,6 +171,7 @@
       :selectData="selectData"
       :update="update"
       :type="type"
+      ref="updateCart"
     ></update-cart>
   </div>
 </template>
@@ -267,6 +268,9 @@ export default {
       this.selectData = { ...row };
       this.type = "编辑";
       this.isShow = true;
+     let child= this.$refs.updateCart
+     console.log(child)
+     child.getDataCarType();
     },
     //修改内容
     update(value) {

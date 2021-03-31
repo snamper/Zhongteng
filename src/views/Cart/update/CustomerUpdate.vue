@@ -37,16 +37,7 @@
             <el-input v-model="datas.psPhone"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="客户服务站编码" :label-width="formLabelWidth">
-            <el-input v-model="datas.serviceId"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="我方负责人编码" :label-width="formLabelWidth">
-            <el-input v-model="datas.userId"></el-input>
-          </el-form-item>
-        </el-col>
+      
         <el-col :span="12">
           <el-form-item label="员工姓名" :label-width="formLabelWidth">
             <el-input v-model="datas.empName"></el-input>
