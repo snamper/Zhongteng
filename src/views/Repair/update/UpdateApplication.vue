@@ -1,13 +1,9 @@
 <template>
-  <el-dialog :title="type" :visible.sync="isShow" :fullscreen="false">
+  <el-dialog :title="type" :visible.sync="isShow" :fullscreen="false" @close="handleClose">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
-          <el-form-item
-            prop="applicationId"
-            label="维修申请单号"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="applicationId" label="维修申请单号" :label-width="formLabelWidth">
             <el-input :disabled="true" v-model="datas.applicationId"></el-input>
           </el-form-item>
         </el-col>
@@ -17,103 +13,52 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="维修类别"
-            prop="category"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="维修类别" prop="category" :label-width="formLabelWidth">
             <el-select v-model="datas.category" placeholder="请选择维修类别">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="客户名称"
-            :label-width="formLabelWidth"
-            prop="ctName"
-          >
+          <el-form-item label="客户名称" :label-width="formLabelWidth" prop="ctName">
             <el-input v-model="datas.ctName"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item 
-          :label-width="formLabelWidth"
-          label="服务站">
-            <el-select
-              v-model="datas.cName"
-              filterable
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in cartServices"
-                :key="item.sName"
-                :label="item.sName"
-                :value="item.sName"
-              >
+          <el-form-item :label-width="formLabelWidth" label="服务站">
+            <el-select v-model="datas.cName" filterable placeholder="请选择">
+              <el-option v-for="item in cartServices" :key="item.sName" :label="item.sName" :value="item.sName">
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="预估人工费"
-            prop="laborCost"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="预估人工费" prop="laborCost" :label-width="formLabelWidth">
             <el-input v-model="datas.laborCost"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="配件1"
-            :label-width="formLabelWidth"
-            prop="product1"
-          >
+          <el-form-item label="配件" :label-width="formLabelWidth" prop="product1">
             <el-input v-model="datas.product1"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="配件2"
-            :label-width="formLabelWidth"
-            prop="product2"
-          >
-            <el-input v-model="datas.product2"></el-input>
+          <el-form-item label="配件" :label-width="formLabelWidth" prop="product1">
+            <el-input v-model="datas.product1"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="配件3"
-            :label-width="formLabelWidth"
-            prop="product3"
-          >
-            <el-input v-model="datas.product3"></el-input>
+          <el-form-item label="申请人" :label-width="formLabelWidth" prop="operator">
+            <el-input v-model="datas.operator" :disabled="false"></el-input>
           </el-form-item>
         </el-col>
-        <el-table-column prop="operator" label="申请人"> </el-table-column>
-        <el-table-column prop="operatorDate" label="操作时间" width="180">
-          <template slot-scope="scope">
-            {{ scope.row.operatorDate | formatDate(true) }}
-          </template>
-        </el-table-column>
-
         <el-col :span="12">
-          <el-form-item
-            prop="remarks"
-            label="备注"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="remarks" label="备注" :label-width="formLabelWidth">
             <template>
               <el-input type="textarea" v-model="datas.remarks"></el-input>
             </template>
@@ -129,7 +74,7 @@
           </el-form-item>
         </el-col>
 
-       <el-col :span="12">
+        <el-col :span="12">
           <el-form-item label="费用预估单" :label-width="formLabelWidth">
             <el-upload class="avatar-uploader" :show-file-list="false">
               <img v-if="imageUrl" :src="datas.workHours" class="avatar" />
@@ -224,9 +169,13 @@ export default {
           }
         });
     },
+    handleClose() {
+      this.$parent.isShow = false;
+    },
     send() {
       const { $axios, datas } = this;
       datas.operator = this.user_info.user_name;
+      datas.userId = this.user_info.user_id;
       datas.operatorDate = Date.now();
       $axios
         .post(applyInfo.addOrUpdate, { ...datas })

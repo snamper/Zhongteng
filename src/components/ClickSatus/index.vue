@@ -1,14 +1,12 @@
 <template>
-  <el-dialog title="查看审核状态" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-    <el-steps :active="4" align-center>
-      <el-step :title="peopleList[item.name]" :description="item.examDevice1" :status="item.type" v-for="(item,index) in statusList" :key="index"></el-step>
-      <!-- <el-step title="步骤2" description="这是一段很长很长很长的描述性文字"></el-step>
-      <el-step title="步骤3" description="这是一段很长很长很长的描述性文字"></el-step>
-      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step> -->
+  <el-dialog title="查看审核状态" :visible.sync="steepVisible" width="30%" @close="handleClose">
+    <el-steps :active="active" align-center>
+      <el-step :title="peopleList[item.name]" :description="item.time+item.device" :status="item.type" v-for="(item,index) in statusList" :key="index"></el-step>
+
     </el-steps>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <el-button @click="$parent.steepVisible = false">取 消</el-button>
+      <el-button type="primary" @click="$parent.steepVisible = false">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -21,33 +19,50 @@ export default {
     statusData: {
       required: true,
       type: Object
+    },
+    steepVisible: {
+      required: true,
+      type: Boolean
     }
   },
   data() {
     return {
       dialogVisible: false,
       statusList: [],
-      peopleList
+      peopleList,
+      active: 0
     }
   },
   watch: {
     statusData: function (val) {
-      const { examStatus1, examStatus2, examStatus3, examStatus4 } = val;
+
+
+      const { examStatus1, examStatus2, examStatus3, examStatus4, examDate1 = '', examDate2 = '', examDate3 = '', examDate4 = '' } = val;
+
 
       this.statusList = [];
 
 
       if (failCode.includes(examStatus1) || failCode.includes(examStatus2) || failCode.includes(examStatus3) || failCode.includes(examStatus4)) {
-        this.statusList.push({ examStatus1: val.examStatus1, examDevice1: val.examDevice1, type: 'error', name: 'examStatus1' })
-        this.statusList.push({ examStatus2: val.examStatus2, examDevice2: val.examDevice2, type: 'error', name: 'examStatus2' })
-        this.statusList.push({ examStatus3: val.examStatus3, examDevice3: val.examDevice3, type: 'error', name: 'examStatus3' })
-        this.statusList.push({ examStatus4: val.examStatus4, examDevice4: val.examDevice4, type: 'error', name: 'examStatus4' })
+        this.statusList.push({ status: val.examStatus1, device: val.examDevice1 ?? '', type: 'wait', name: 'examStatus1', time: examDate1 ? '审核时间' + examDate1 : '' })
+        this.statusList.push({ status: val.examStatus2, device: val.examDevice2 ?? '', type: 'wait', name: 'examStatus2', time: examDate2 ? '审核时间' + examDate2 : '' })
+        this.statusList.push({ status: val.examStatus3, device: val.examDevice3 ?? '', type: 'wait', name: 'examStatus3', time: examDate3 ? '审核时间' + examDate3 : '' })
+        this.statusList.push({ status: val.examStatus4, device: val.examDevice4 ?? '', type: 'wait', name: 'examStatus4', time: examDate4 ? '审核时间' + examDate4 : '' })
       } else {
-        this.statusList.push({ examStatus1: val.examStatus1, examDevice1: val.examDevice1, type: 'success', name: 'examStatus1' })
-        this.statusList.push({ examStatus2: val.examStatus2, examDevice2: val.examDevice2, type: 'success', name: 'examStatus2' })
-        this.statusList.push({ examStatus3: val.examStatus3, examDevice3: val.examDevice3, type: 'success', name: 'examStatus3' })
-        this.statusList.push({ examStatus4: val.examStatus4, examDevice4: val.examDevice4, type: 'success', name: 'examStatus4' })
+        this.statusList.push({ status: val.examStatus1, device: val.examDevice1 ?? '', type: 'wait', name: 'examStatus1', time: examDate1 ? '审核时间' + examDate1 : '' })
+        this.statusList.push({ status: val.examStatus2, device: val.examDevice2 ?? '', type: 'wait', name: 'examStatus2', time: examDate2 ? '审核时间' + examDate2 : '' })
+        this.statusList.push({ status: val.examStatus3, device: val.examDevice3 ?? '', type: 'wait', name: 'examStatus3', time: examDate3 ? '审核时间' + examDate3 : '' })
+        this.statusList.push({ status: val.examStatus4, device: val.examDevice4 ?? '', type: 'wait', name: 'examStatus4', time: examDate4 ? '审核时间' + examDate4 : '' })
       }
+      this.statusList.forEach((item, index) => {
+        if (item.status == 0) {
+          item.type = 'error'
+        } else if (item.status == 1) {
+          item.type = 'success'
+        }
+      })
+
+
     }
   },
   computed: {
@@ -61,8 +76,8 @@ export default {
     },
   },
   methods: {
-    close() {
-      this.dialogVisible = false
+    handleClose() {
+      this.$parent.steepVisible = false
     }
   },
 }

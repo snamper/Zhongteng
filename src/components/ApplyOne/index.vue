@@ -1,16 +1,17 @@
 <template>
-  <ApplyComm :filterType="filterType" />
+  <ApplyComm :typeApi="typeApi" />
 </template>
 
 <script>
-import ApplyComm from '@/components/ApplyComm'
+import ApplyComm from '@/components/ApplyComm';
+
 export default {
   components: {
-    ApplyComm
+    ApplyComm,
   },
   data() {
     return {
-      filterType: 'neiqin'
+      typeApi: 'neiqin'
     }
   },
 }

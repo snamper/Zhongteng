@@ -1,58 +1,34 @@
 <template>
-  <el-dialog :title="type" :visible.sync="isShow">
+  <el-dialog :title="type" :visible.sync="isShow" @close="closeDialog">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
-          <el-form-item
-            prop="stockId"
-            label="库存编码"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="stockId" label="库存编码" :label-width="formLabelWidth">
             <el-input v-model="datas.stockId"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="库存日期"
-            prop="invDate"
-            :label-width="formLabelWidth"
-          >
-            <el-date-picker
-              type="datetime"
-              v-model="datas.invDate"
-              placeholder="选择日期时间"
-            >
+          <el-form-item label="库存日期" prop="invDate" :label-width="formLabelWidth">
+            <el-date-picker type="datetime" v-model="datas.invDate" placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            prop="productId"
-            label="产品编码"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="productId" label="产品编码" :label-width="formLabelWidth">
             <el-input v-model="datas.productId"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            prop="pName"
-            label="产品名称"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="pName" label="产品名称" :label-width="formLabelWidth">
             <el-input v-model="datas.pName"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            prop="batchNum"
-            label="批号"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="batchNum" label="批号" :label-width="formLabelWidth">
             <el-input v-model="datas.batchNum"></el-input>
           </el-form-item>
         </el-col>
@@ -64,11 +40,7 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            prop="remarks"
-            label="备注"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="remarks" label="备注" :label-width="formLabelWidth">
             <el-input v-model="datas.remarks"></el-input>
           </el-form-item>
         </el-col>
@@ -140,6 +112,9 @@ export default {
   },
 
   methods: {
+    closeDialog() {
+      this.$parent.isShow = false;
+    },
     send() {
       const { $axios, datas } = this;
       datas.operator = this.user_info.user_name;

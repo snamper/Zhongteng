@@ -4,14 +4,15 @@
 
 <script>
 import ApplyComm from '@/components/ApplyComm';
-import { manager } from "@/api";
+
 export default {
   components: {
     ApplyComm,
+
   },
   data() {
     return {
-      typeApi: 'manager'
+      typeApi: 'finance'
     }
   },
 }

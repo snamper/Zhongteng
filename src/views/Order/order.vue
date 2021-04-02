@@ -21,8 +21,7 @@
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column fixed prop="orderId" label="车辆订单编码" width="120">
       </el-table-column>
-      <el-table-column fixed prop="customerId" label="客户编码" width="80">
-      </el-table-column>
+     
       <el-table-column prop="ctName" label="客户名称" width="150">
       </el-table-column>
       <el-table-column prop="carName" label="车型名称" width="120">
@@ -31,8 +30,7 @@
       </el-table-column>
       <el-table-column prop="empName1" label="负责人一" width="120">
       </el-table-column>
-      <el-table-column prop="empName2" label="负责人二" width="120">
-      </el-table-column>
+      
       <el-table-column prop="operator" label="操作人" width="90">
       </el-table-column>
       <el-table-column prop="operatorDate" label="操作时间" width="180">

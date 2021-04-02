@@ -23,13 +23,14 @@ export default {
   },
   methods: {
     success() {
-     this.$emit("success", this.text,'通过');
+      this.$emit("success", this.text, '通过');
+
     },
-    notSuccess(){
-         if (this.text === "") {
+    notSuccess() {
+      if (this.text === "") {
         this.$message.error("请输入拒绝理由");
       } else {
-        this.$emit("success", this.text,'不通过');
+        this.$emit("success", this.text, '不通过');
       }
     }
   },

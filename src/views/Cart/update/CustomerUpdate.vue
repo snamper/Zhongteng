@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="type" :visible.sync="isShow">
+  <el-dialog :title="type" :visible.sync="isShow" @close="clseDialog">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
@@ -37,7 +37,7 @@
             <el-input v-model="datas.psPhone"></el-input>
           </el-form-item>
         </el-col>
-      
+
         <el-col :span="12">
           <el-form-item label="员工姓名" :label-width="formLabelWidth">
             <el-input v-model="datas.empName"></el-input>
@@ -129,6 +129,9 @@ export default {
   },
 
   methods: {
+    clseDialog() {
+      this.$parent.isShow = false;
+    },
     send() {
       const { $axios, datas } = this;
       const { region } = datas;

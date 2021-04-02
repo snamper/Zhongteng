@@ -24,7 +24,7 @@ Vue.filter('formatDate', function(value, isHourse = false) {
     return value ? Moment(value).format('YYYY-MM-DD ') : '暂无'
   }
 })
-
+Vue.config.devtools = true
 //全局分页混入
 Vue.mixin(pagination)
 

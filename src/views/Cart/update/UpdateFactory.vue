@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="type" :visible.sync="isShow">
+  <el-dialog :title="type" :visible.sync="isShow" @close="closeDialog">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
@@ -113,6 +113,9 @@ export default {
   },
 
   methods: {
+    closeDialog() {
+      this.$parent.isShow = false;
+    },
     send() {
       const { $axios, datas } = this;
       const { region } = datas;

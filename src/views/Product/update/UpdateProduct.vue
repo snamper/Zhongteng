@@ -1,65 +1,34 @@
 <template>
-  <el-dialog
-    :title="type"
-    :visible.sync="isShow"
-  >
-    <el-form
-      :model="datas"
-      ref="ruleForm"
-      :rules="rules"
-    >
+  <el-dialog :title="type" :visible.sync="isShow" @close="closeDialog">
+    <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
-          <el-form-item
-            prop="productId"
-            label="产品编码"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="productId" label="产品编码" :label-width="formLabelWidth">
             <el-input v-model="datas.productId"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="产品名称"
-            prop="pName"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="产品名称" prop="pName" :label-width="formLabelWidth">
             <el-input v-model="datas.pName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="生厂厂家"
-            prop="factory"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="生厂厂家" prop="factory" :label-width="formLabelWidth">
             <el-input v-model="datas.factory"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="产品规格"
-            prop="pSpec"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="产品规格" prop="pSpec" :label-width="formLabelWidth">
             <el-input v-model="datas.pSpec"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="操作者"
-            prop="operator"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="操作者" prop="operator" :label-width="formLabelWidth">
             <el-input v-model="datas.operator"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="操作时间"
-            prop="operatorDate"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="操作时间" prop="operatorDate" :label-width="formLabelWidth">
             <el-input v-model="datas.operatorDate"></el-input>
           </el-form-item>
         </el-col>
@@ -67,15 +36,9 @@
       </el-row>
 
     </el-form>
-    <div
-      slot="footer"
-      class="dialog-footer"
-    >
+    <div slot="footer" class="dialog-footer">
       <el-button @click="$parent.isShow = false">取 消</el-button>
-      <el-button
-        type="primary"
-        @click="update('ruleForm')"
-      >确 定</el-button>
+      <el-button type="primary" @click="update('ruleForm')">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -149,6 +112,9 @@ export default {
   },
 
   methods: {
+    closeDialog() {
+      this.$parent.isShow = false;
+    },
     send() {
       const { $axios, datas, } = this;
       datas.operator = this.user_info.user_name;

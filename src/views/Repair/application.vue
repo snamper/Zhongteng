@@ -1,59 +1,72 @@
 <template>
-  <el-tabs type="border-card">
-    <el-tab-pane label="申请信息">
-      <Apply></Apply>
-    </el-tab-pane>
+  <el-tabs type="border-card" v-model="selectTab" @tab-click="changeIndex">
 
-    <el-tab-pane label="内勤审核">
-      <ApplyOne/></el-tab-pane>
-
-      <el-tab-pane label="主管复核">
-      <ApplyTwo/></el-tab-pane>
-
-      <el-tab-pane label="总经理复核">
-      <ApplyThree/></el-tab-pane>
-
-    <el-tab-pane label="财务审核通过">
-      <ApplySuccess/>
-    </el-tab-pane>
-
-    <el-tab-pane label="审核失败">
-      <ApplyReject/>
-    </el-tab-pane>
+    <template v-for="(item,index) in template">
+      <el-tab-pane :label="item.title" :key="index" v-if="item.show">
+        <!-- <Apply v-if="selectTab==index" /> -->
+        <component :is="item.component"></component>
+      </el-tab-pane>
+    </template>
 
   </el-tabs>
 
 </template>
 
 <script>
-// import Apply from '@/components/Apply'
-// export default {
-//   components: {
-//     Apply
-//   },
+
 
 import Apply from '@/components/Apply'
 import ApplyOne from '@/components/ApplyOne'
 import ApplyTwo from '@/components/ApplyTwo'
 import ApplyThree from '@/components/ApplyThree'
+import ApplyFour from '@/components/ApplyFour'
 import ApplyReject from '@/components/ApplyReject'
 import ApplySuccess from '@/components/ApplySuccess'
-
+import { mapGetters } from "vuex";
 export default {
   components: {
     Apply,
-    ApplyOne,
-    ApplyTwo,
-    ApplyThree,
-    ApplyReject,
-    ApplySuccess,
+
+  },
+  computed: {
+    ...mapGetters(["user_info"]),
   },
   data() {
     return {
+      selectTab: '0',
+      department: null,
+      template: [
+        { title: '申请信息', component: Apply, show: true },
+        { title: '内勤审核', component: ApplyOne, show: false },
+        { title: '主管审核', component: ApplyTwo, show: false },
+        { title: '总经理审核', component: ApplyThree, show: false },
+        { title: '财务审核', component: ApplyFour, show: false },
+        { title: '审核通过', component: ApplyReject, show: true },
+        { title: '审核失败', component: ApplySuccess, show: true },
+      ],
+      showArr: ['申请信息', '审核通过', '审核失败']
     };
   },
-  methods: {
 
+  created() {
+
+    this.department = this.user_info.department;
+    this.showArr.push(this.department)
+    this.template.forEach(item => {
+      if (this.showArr.includes(item.title)) {
+        item.show = true;
+      } else if (item.title.includes(this.department)) {
+        item.show = true;
+      } else {
+        item.show = false;
+      }
+    })
+  },
+  methods: {
+    changeIndex(option, value) {
+      console.log(option.index)
+      this.selectTab = option.index;
+    },
   }
 };
 </script>

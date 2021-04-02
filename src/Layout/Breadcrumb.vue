@@ -1,33 +1,19 @@
 <template>
   <div class="breadcrumb">
-    <i
-      :class='[icon]'
-      @click="menuIcon"
-    ></i>
+    <i :class='[icon]' @click="menuIcon"></i>
 
     <div class="breadTitle">
       <el-breadcrumb>
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 
-        <el-breadcrumb-item
-          v-for="(item,index) in breadList"
-          :key="index"
-          :to="item.path"
-        >{{item.meta.title}}</el-breadcrumb-item>
+        <el-breadcrumb-item v-for="(item,index) in breadList" :key="index" :to="item.path">{{item.meta.title}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="username">
-      <img
-        src="~@/assets/images/logo.png"
-        alt="江苏中腾新能源有限公司"
-        class="logo"
-      >
+      <img src="~@/assets/images/logo.png" alt="江苏中腾新能源有限公司" class="logo">
       <el-dropdown @command="handleCommand">
 
-        <img
-          src="~@/assets/images/username.gif"
-          alt=""
-        >
+        <img src="~@/assets/images/username.gif" alt="">
 
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="username">{{user_info.user_name}}</el-dropdown-item>
@@ -83,7 +69,10 @@ export default {
     },
     handleCommand(command) {
       if (command == 'loginOut') {
-        localStorage.removeItem('token');
+
+        localStorage.removeItem('token')
+        localStorage.removeItem('user_id')
+        localStorage.removeItem('user_name')
         this.$router.replace('/login')
       }
     },

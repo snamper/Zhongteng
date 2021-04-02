@@ -1,5 +1,5 @@
 <template>
-  <ApplyComm :filterType="filterType" />
+  <ApplyComm :typeApi="typeApi" />
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
   },
   data() {
     return {
-      filterType: 'fail'
+      typeApi: 'fail'
     }
   },
 }

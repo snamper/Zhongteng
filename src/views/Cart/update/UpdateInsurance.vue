@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="type" :visible.sync="isShow">
+  <el-dialog :title="type" :visible.sync="isShow" @close="closeDialog">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
         <el-col :span="12">
@@ -8,119 +8,63 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="保单号"
-            prop="policyNum"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="保单号" prop="policyNum" :label-width="formLabelWidth">
             <el-input v-model="datas.policyNum"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="保险公司"
-            prop="insuranceCp"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="保险公司" prop="insuranceCp" :label-width="formLabelWidth">
             <el-input v-model="datas.insuranceCp"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="联系人"
-            prop="insPerson"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="联系人" prop="insPerson" :label-width="formLabelWidth">
             <el-input v-model="datas.insPerson"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="手机"
-            prop="insPhone"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="手机" prop="insPhone" :label-width="formLabelWidth">
             <el-input v-model="datas.insPhone"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="商保开始日期"
-            prop="busBegdate"
-            :label-width="formLabelWidth"
-          >
-            <el-date-picker
-              type="datetime"
-              v-model="datas.busBegdate"
-              placeholder="选择日期时间"
-            >
+          <el-form-item label="商保开始日期" prop="busBegdate" :label-width="formLabelWidth">
+            <el-date-picker type="datetime" v-model="datas.busBegdate" placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            label="商保截止日期"
-            prop="busEnddate"
-            :label-width="formLabelWidth"
-          >
-            <el-date-picker
-              type="datetime"
-              v-model="datas.busEnddate"
-              placeholder="选择日期时间"
-            >
+          <el-form-item label="商保截止日期" prop="busEnddate" :label-width="formLabelWidth">
+            <el-date-picker type="datetime" v-model="datas.busEnddate" placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            prop="busCost"
-            label="商保费用"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="busCost" label="商保费用" :label-width="formLabelWidth">
             <el-input v-model="datas.busCost"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="交强险开始日"
-            prop="traBegdate"
-            :label-width="formLabelWidth"
-          >
-            <el-date-picker
-              type="datetime"
-              v-model="datas.traBegdate"
-              placeholder="选择日期时间"
-            >
+          <el-form-item label="交强险开始日" prop="traBegdate" :label-width="formLabelWidth">
+            <el-date-picker type="datetime" v-model="datas.traBegdate" placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="交强险截止日"
-            prop="traEnddate"
-            :label-width="formLabelWidth"
-          >
-            <el-date-picker
-              type="datetime"
-              v-model="datas.traEnddate"
-              placeholder="选择日期时间"
-            >
+          <el-form-item label="交强险截止日" prop="traEnddate" :label-width="formLabelWidth">
+            <el-date-picker type="datetime" v-model="datas.traEnddate" placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            label="交强险费用"
-            prop="traCost"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item label="交强险费用" prop="traCost" :label-width="formLabelWidth">
             <el-input v-model="datas.traCost"></el-input>
           </el-form-item>
         </el-col>
-       
+
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -210,6 +154,9 @@ export default {
   },
 
   methods: {
+    closeDialog() {
+      this.$parent.isShow = false;
+    },
     send() {
       const { $axios, datas } = this;
       datas.insOperator = this.user_info.user_name;

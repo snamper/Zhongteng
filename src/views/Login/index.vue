@@ -1,17 +1,7 @@
 <template>
-  <div
-    class="login-container"
-    :style="loginContainerStyle"
-  >
+  <div class="login-container" :style="loginContainerStyle">
     <pointwave :color="0x097bdb" />
-    <el-form
-      :rules="loginRules"
-      auto-complete="on"
-      :model="loginForm"
-      ref="ruleForm"
-      class="login-form"
-      @keyup.enter.native="submitForm('ruleForm')"
-    >
+    <el-form :rules="loginRules" auto-complete="on" :model="loginForm" ref="ruleForm" class="login-form" @keyup.enter.native="submitForm('ruleForm')">
 
       <div class="title-container">
         <h3 class="title">江苏中腾新能源有限公司</h3>
@@ -21,32 +11,18 @@
         <!-- <span class="svg-container">
          <img src="" alt="">
         </span> -->
-        <el-input
-          v-model="loginForm.userAccount"
-          placeholder="请输入账户"
-          type="text"
-          tabindex="1"
-        />
+        <el-input v-model="loginForm.userAccount" placeholder="请输入账户" type="text" tabindex="1" />
       </el-form-item>
 
       <el-form-item prop="password">
         <!-- <span class="svg-container">
           <svg-icon icon-class="password" />
         </span> -->
-        <el-input
-          v-model="loginForm.password"
-          placeholder="请输入密码"
-          type='password'
-        />
+        <el-input v-model="loginForm.password" placeholder="请输入密码" type='password' />
 
       </el-form-item>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width:100%;margin-bottom:30px;"
-        @click="submitForm('ruleForm')"
-      >登陆</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click="submitForm('ruleForm')">登陆</el-button>
 
     </el-form>
   </div>
@@ -108,20 +84,23 @@ export default {
 
           }).then(res => {
             let data = res.data;
-            let userId = data.data.userId;
-            console.log(userId, 'userId')
-            let user_name = data.data.userAccount;
-            let token = data.data.token;
+            let { userAccount, userId, token, department } = data.data
+
+
+
             if ((res.status == 200 && data.errCode != 0) || !token) {
               this.$message.error(data.message)
             } else {
               this.$router.replace('/home')
               localStorage.setItem('token', token)
-              localStorage.setItem('user_name', user_name)
+              localStorage.setItem('user_id', window.encodeURI(userId))
+              localStorage.setItem('user_name', window.encodeURI(userAccount))
+              localStorage.setItem('department', window.encodeURI(department))
               this.SET_USER({
                 user_id: userId,
-                user_name: user_name,
+                user_name: userAccount,
                 user_token: token,
+                department: department
               })
               _self.$axios.get(getMenu.menuUrl + '/' + userId).then(res => {
                 console.log(res)

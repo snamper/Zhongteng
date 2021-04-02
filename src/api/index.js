@@ -55,12 +55,34 @@ export const applyInfo = {
   addOrUpdate: '/api/v1/repair/addOrUpdateApplication',
   delete: '/api/v1/repair/removeApplicationInfo',
 }
-
-//申请审核
-export const appExamine = {
-  query: '/api/v1/repair/queryAppExamineList',
-  addOrUpdate: '/api/v1/repair/addOrUpdateAppExamine',
-  delete: '/api/v1/repair/removeAppExamineInfo',
+//维修审核
+export const repairApi = {
+  neiqin: {
+    query: '/api/v1/repair/queryApplicationList1',
+    update: '/api/v1/repair/addOrUpdateApplication',
+  },
+  //申请信息主管审核
+  director: {
+    query: '/api/v1/repair/queryApplicationList2',
+    update: '/api/v1/repair/addOrUpdateApplication',
+  },
+  //申请信息总经理审核
+  manager: {
+    query: '/api/v1/repair/queryApplicationList3',
+    update: '/api/v1/repair/addOrUpdateApplication',
+  },
+  //申请信息财务审核
+  finance: {
+    query: '/api/v1/repair/queryApplicationList4',
+    update: '/api/v1/repair/addOrUpdateApplication',
+  },
+  //申请通过信息
+  success: {
+    query: '/api/v1/repair/queryApplicationSuccessList',
+  },
+  fail: {
+    query: '/api/v1/repair/queryApplicationfailList',
+  },
 }
 
 //回执信息
@@ -71,7 +93,7 @@ export const receipt = {
 }
 
 //回执审核
-export const repExamine= {
+export const repExamine = {
   query: '/api/v1/repair/queryRepExamineList',
   addOrUpdate: '/api/v1/repair/addOrUpdateRepExamine',
   delete: '/api/v1/repair/removeRepExamineInfo',
