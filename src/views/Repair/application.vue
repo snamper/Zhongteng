@@ -41,10 +41,10 @@ export default {
         { title: '主管审核', component: ApplyTwo, show: false },
         { title: '总经理审核', component: ApplyThree, show: false },
         { title: '财务审核', component: ApplyFour, show: false },
-        { title: '审核通过', component: ApplyReject, show: true },
-        { title: '审核失败', component: ApplySuccess, show: true },
+        { title: '通过', component: ApplySuccess, show: true },
+        { title: '失败', component: ApplyReject, show: true },
       ],
-      showArr: ['申请信息', '审核通过', '审核失败']
+      showArr: ['申请信息', '通过', '失败']
     };
   },
 
