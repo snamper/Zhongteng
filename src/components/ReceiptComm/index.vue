@@ -14,45 +14,31 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="申请单号">
-              <span>{{ props.row.applicationId }}</span>
+            <el-form-item label="回执单号">
+              <span>{{ props.row.receiptId }}</span>
             </el-form-item>
             <el-form-item label="车架号">
               <span>{{ props.row.vin }}</span>
             </el-form-item>
-            <el-form-item label="车牌号">
-              <span>待添加</span>
+
+            <el-form-item label="结算清单">
+              <span>{{ props.row.list }}</span>
             </el-form-item>
-            <el-form-item label="客户名称">
-              <span>{{ props.row.ctName }}</span>
+            <el-form-item label="增值税发票">
+              <span>{{ props.row.invoice }}</span>
+            </el-form-item>
+            <el-form-item label="付款申请书">
+              <span>{{ props.row.appPayment }}</span>
             </el-form-item>
 
-            <el-form-item label="维修服务站">
-              <span>{{ props.row.cName }}</span>
+         
+            <el-form-item label="旧配件">
+              <el-button type="text" label="旧配件" @click="openlist">{{
+                props.row.oldPart1
+              }}</el-button>
             </el-form-item>
 
-            <el-form-item label="故障图片">
-              <el-button type="text" label="事故图片" @>
-                {{ props.row.troublePic }}
-              </el-button>
-            </el-form-item>
-
-            <el-form-item label="配件">
-              <el-button type="text" label="配件">
-                {{ props.row.product1 }}
-              </el-button>
-            </el-form-item>
-
-            <el-form-item label="费用预估单">
-              <el-button type="text" label="事故图片" @click="openlist">
-                {{ props.row.workHours }}
-              </el-button>
-            </el-form-item>
-
-            <el-form-item label="预估费用">
-              <span>{{ props.row.laborCost }}</span>
-            </el-form-item>
-
+   
             <el-form-item label="问题描述">
               <span>{{ props.row.remarks }}</span>
             </el-form-item>
@@ -63,7 +49,7 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="申请单号" prop="applicationId" width="100"></el-table-column>
+      <el-table-column label="回执单号" prop="receiptId" width="100"></el-table-column>
       <el-table-column label="上传日期" prop="operatorDate">
         <template slot-scope="scope">{{
           scope.row.operatorDate | formatDate(true)
@@ -71,7 +57,6 @@
       </el-table-column>
       <el-table-column label="车架号" prop="vin"></el-table-column>
       <el-table-column label="客户名称" prop="ctName"></el-table-column>
-      <el-table-column label="维修类别" prop="category"></el-table-column>
       <el-table-column label="申请人" prop="operator"></el-table-column>
 
       <el-table-column label="描述" prop="remarks"></el-table-column>
@@ -83,7 +68,7 @@
       </el-table-column>
     </el-table>
     <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1"></el-pagination>
-    <ApplyExamine :isShow="isShow" @success="success"></ApplyExamine>
+    <ReceiptExamine :isShow="isShow" @success="success"></ReceiptExamine>
     <!-- 查看审核状态 -->
     <ClickSatus :statusData="statusData" :steepVisible="steepVisible" ref="statusRef"></ClickSatus>
   </div>
@@ -93,7 +78,6 @@
 <script>
 import { mapGetters } from "vuex";
 import { repairApi } from '@/api'
-import ApplyExamine from "@/views/Repair/update/ApplyExamine.vue";
 import ClickSatus from "@/components/ClickSatus";
 import { hiddenBtn, status } from '@/config'
 import _ from "lodash";
@@ -124,7 +108,7 @@ export default {
   },
 
   components: {
-    ApplyExamine,
+
     ClickSatus,
   },
 

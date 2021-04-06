@@ -12,29 +12,13 @@
       <el-button type="primary" @click="addCart">增加</el-button>
       <el-button type="danger" @click="deletesHandle">批量删除</el-button>
 
-      <download-excel
-        class="export-excel-wrapper"
-        :data="cartList"
-        :fields="json_fields"
-      >
+      <download-excel class="export-excel-wrapper" :data="cartList" :fields="json_fields">
         <el-button type="primary" size="small">导出EXCEL</el-button>
       </download-excel>
     </div>
-    <el-table
-      :data="cartList"
-      style="width: 100%"
-      height="700px"
-      border
-      @selection-change="handleSelectionChange"
-    >
+    <el-table :data="cartList" style="width: 100%" height="700px" border @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column
-        fixed
-        prop="carId"
-        label="车辆编码"
-        width="80"
-        align="center"
-      >
+      <el-table-column fixed prop="carId" label="车辆编码" width="80" align="center">
       </el-table-column>
       <el-table-column fixed prop="vin" label="车架号" width="180">
       </el-table-column>
@@ -44,26 +28,22 @@
       </el-table-column>
       <el-table-column prop="carName" label="车型" width="200">
       </el-table-column>
-      <el-table-column prop="regDate" label="上牌日期" width="150">
+      <el-table-column prop="regDate" label="注册日期" width="150">
         <template slot-scope="scope">
           {{ scope.row.regDate | formatDate }}
         </template>
       </el-table-column>
       <el-table-column prop="" label="购车发票" width="120" align="center">
         <template slot-scope="scope">
-          <el-image
-            :src="scope.row.invoice"
-            style="width: 30px; height: 30px"
-            :preview-src-list="scope.row.invoice"
-          ></el-image>
+          <el-image :src="scope.row.invoice" style="width: 30px; height: 30px" :preview-src-list="scope.row.invoice"></el-image>
         </template>
       </el-table-column>
 
       <el-table-column prop="ctName" label="客户名称" width="150">
       </el-table-column>
-
+      <!-- 
       <el-table-column prop="fName" label="主机厂" width="100">
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column prop="motDate" label="年检日期" width="150">
         <template slot-scope="scope">
@@ -76,21 +56,13 @@
           <el-tag v-if="scope.row.delStatus == 1" type="success">已交付</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="carProperty"
-        label="车辆产权证"
-        align="center"
-        width="150"
-      >
+      <el-table-column prop="carProperty" label="车辆产权证" align="center" width="150">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.carProperty == 0" type="danger"
-            >未确认</el-tag
-          >
-          <el-tag v-if="scope.row.carProperty == 1" type="success"
-            >已确认</el-tag
-          >
+          <el-tag v-if="scope.row.carProperty == 0" type="danger">未确认</el-tag>
+          <el-tag v-if="scope.row.carProperty == 1" type="success">已确认</el-tag>
         </template>
       </el-table-column>
+      <!-- 
       <el-table-column
         prop="carEqual"
         label="车辆一致性证书"
@@ -102,16 +74,15 @@
           <el-tag v-if="scope.row.carEqual == 1" type="success">已确认</el-tag>
         </template>
       </el-table-column>
+       -->
       <el-table-column prop="carLicense" label="行驶证">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.carLicense == 0" type="danger">未确认</el-tag>
-          <el-tag v-if="scope.row.carLicense == 1" type="success"
-            >已确认</el-tag
-          >
+          <el-tag v-if="scope.row.carLicense == 1" type="success">已确认</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column prop="certificate" label="合格证">
+      <!-- <el-table-column prop="certificate" label="合格证">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.certificate == 0" type="danger"
             >未确认</el-tag
@@ -121,12 +92,15 @@
           >
         </template>
       </el-table-column>
+       -->
+
       <el-table-column prop="orderId" label="订单编码"> </el-table-column>
-      <el-table-column prop="deliveryDate" label="交付日期" width="150">
+
+      <!-- <el-table-column prop="deliveryDate" label="交付日期" width="150">
         <template slot-scope="scope">
           {{ scope.row.deliveryDate | formatDate }}
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column prop="operator" label="操作人"> </el-table-column>
       <el-table-column prop="operatorDate" label="操作时间" width="180">
@@ -134,45 +108,22 @@
           {{ scope.row.operatorDate | formatDate(true) }}
         </template>
       </el-table-column>
-      
+
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <!-- <el-popconfirm title="是否删除此条数据?">
            
           </el-popconfirm> -->
-          <el-popconfirm
-            confirm-button-text="好的"
-            cancel-button-text="不用了"
-            icon="el-icon-info"
-            icon-color="red"
-            title="这是一段内容确定删除吗？"
-            @confirm="handleDelete(scope.$index, scope.row)"
-          >
-            <el-button size="mini" type="danger" slot="reference"
-              >删除</el-button
-            >
+          <el-popconfirm confirm-button-text="好的" cancel-button-text="不用了" icon="el-icon-info" icon-color="red" title="是否删除此条数据?" @confirm="handleDelete(scope.$index, scope.row)">
+            <el-button size="mini" type="danger" slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page.sync="page"
-      :page-size="pageSize"
-      layout="total, prev, pager, next"
-      :total="totalArr.length - 1"
-    >
+    <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1">
     </el-pagination>
-    <update-cart
-      :isShow="isShow"
-      :selectData="selectData"
-      :update="update"
-      :type="type"
-      ref="updateCart"
-    ></update-cart>
+    <update-cart :isShow="isShow" :selectData="selectData" :update="update" :type="type" ref="updateCart"></update-cart>
   </div>
 </template>
 
@@ -268,9 +219,9 @@ export default {
       this.selectData = { ...row };
       this.type = "编辑";
       this.isShow = true;
-     let child= this.$refs.updateCart
-     console.log(child)
-     child.getDataCarType();
+      let child = this.$refs.updateCart;
+      console.log(child);
+      child.getDataCarType();
     },
     //修改内容
     update(value) {

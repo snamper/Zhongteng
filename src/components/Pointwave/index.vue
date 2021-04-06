@@ -46,7 +46,7 @@ export default {
     this.animate()
   },
   methods: {
-    init: function() {
+    init: function () {
       const SEPARATION = 100
       const SCREEN_WIDTH = window.innerWidth
       const SCREEN_HEIGHT = window.innerHeight
@@ -91,7 +91,7 @@ export default {
           attribute float scale;
           void main() {
             vec4 mvPosition = modelViewMatrix * vec4( position, 2.0 );
-            gl_PointSize = scale * ( 300.0 / - mvPosition.z );
+            gl_PointSize = scale * ( 500.0 / - mvPosition.z );
             gl_Position = projectionMatrix * mvPosition;
           }
         `,
@@ -118,7 +118,7 @@ export default {
       document.addEventListener('touchstart', this.onDocumentTouchStart, { passive: false })
       document.addEventListener('touchmove', this.onDocumentTouchMove, { passive: false })
     },
-    render: function() {
+    render: function () {
       this.camera.position.x += (this.mouseX - this.camera.position.x) * 0.05
       this.camera.position.y = 400
       this.camera.lookAt(this.scene.position)
@@ -141,25 +141,25 @@ export default {
       this.renderer.render(this.scene, this.camera)
       this.count += 0.1
     },
-    animate: function() {
+    animate: function () {
       requestAnimationFrame(this.animate)
       this.render()
     },
-    onDocumentMouseMove: function(event) {
+    onDocumentMouseMove: function (event) {
       this.mouseX = event.clientX - this.windowHalfX
     },
-    onDocumentTouchStart: function(event) {
+    onDocumentTouchStart: function (event) {
       if (event.touches.length === 1) {
         this.mouseX = event.touches[0].pageX - this.windowHalfX
       }
     },
-    onDocumentTouchMove: function(event) {
+    onDocumentTouchMove: function (event) {
       if (event.touches.length === 1) {
         event.preventDefault()
         this.mouseX = event.touches[0].pageX - this.windowHalfX
       }
     },
-    onWindowResize: function() {
+    onWindowResize: function () {
       this.windowHalfX = window.innerWidth / 2
       this.camera.aspect = window.innerWidth / window.innerHeight
       this.camera.updateProjectionMatrix()

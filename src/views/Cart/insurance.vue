@@ -31,28 +31,30 @@
       </el-table-column>
       <el-table-column prop="insPhone" label="手机" width="120">
       </el-table-column>
-      <el-table-column prop="busBegdate" label="商保开始日期" width="120">
+      <!-- <el-table-column prop="busBegdate" label="商保开始日期" width="120">
         <template slot-scope="scope">
           {{ scope.row.busBegdate | formatDate }}
         </template>
-      </el-table-column>
-      <el-table-column prop="busEnddate" label="商保截止日期" width="120">
+      </el-table-column> -->
+      <el-table-column prop="busEnddate" label="商保到期日" width="120">
         <template slot-scope="scope">
           {{ scope.row.busEnddate | formatDate }}
         </template>
       </el-table-column>
       <el-table-column prop="busCost" label="商保费用" width="80">
       </el-table-column>
-      <el-table-column prop="traBegdate" label="交强险开始日期" width="120">
+      <!-- <el-table-column prop="traBegdate" label="交强险开始日期" width="120">
         <template slot-scope="scope">
           {{ scope.row.traBegdate | formatDate }}
         </template>
-      </el-table-column>
-      <el-table-column prop="traEnddate" label="交强险截止日期" width="120">
+      </el-table-column> -->
+      
+      <el-table-column prop="traEnddate" label="交强险到期日" width="120">
         <template slot-scope="scope">
           {{ scope.row.traEnddate | formatDate }}
         </template>
       </el-table-column>
+
       <el-table-column prop="traCost" label="交强险费用" width="100">
       </el-table-column>
 

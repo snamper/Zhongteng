@@ -1,6 +1,6 @@
 <template>
   <div class="updateCart">
-    <el-dialog :title="title" :visible.sync="isShow" width="50%" :fullscreen="false" @close="closeDialog">
+    <el-dialog :title="title" :visible.sync="isShow" width="50%" :fullscreen="false" @close="closeDialog" :modal-append-to-body="false">
       <div class="body">
         <el-form ref="form" :model="selectData" label-width="100px">
           <el-row>
@@ -142,10 +142,11 @@
 
             <el-col :span="12">
               <el-form-item label="发票">
-                <el-upload class="avatar-uploader" :show-file-list="false">
-                  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+
+                <el-upload list-type="picture-card" multiple :on-preview="handlePictureCardPreview" :on-change="fileChange" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false" :headers="imgHeaders">
+                  <i class="el-icon-plus"></i>
                 </el-upload>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -157,12 +158,15 @@
         <el-button type="primary" @click="handleClose">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { order, customer, cartModel, factory } from "@/api";
+import { order, customer, cartModel, factory, uploadImg } from "@/api";
 
 export default {
   name: "updateCart",
@@ -193,6 +197,12 @@ export default {
           label: "未确认",
         },
       ],
+      loadImgUrl: '',
+      imgHeaders: {
+        'Content-Type': 'multipart/form-data'
+      },
+      fileList: [],
+      dialogVisible: false,
     };
   },
   created() {
@@ -200,6 +210,7 @@ export default {
     this.getDataCarType();
     this.getDataOrder();
     this.getDataCustomer();
+    this.loadImgUrl = uploadImg.upload
   },
   props: {
     isShow: {
@@ -215,6 +226,11 @@ export default {
       type: String,
     },
   },
+  watch: {
+    isShow: function () {
+      this.fileList = [];
+    }
+  },
   computed: {
     ...mapGetters(["user_info"]),
     title() {
@@ -222,6 +238,46 @@ export default {
     },
   },
   methods: {
+    fileChange(file, fileList) {
+
+      this.fileList = fileList;
+    },
+    fileRemove(file, fileList) {
+      this.fileList = fileList;
+    },
+    handleRemove(file, fileList) {
+      let uid = file.uid
+
+
+      this.$_.remove(this.fileList, { uid })
+
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    submitUpload() {
+
+      if (this.fileList.length <= 0) {
+        this.$message.warning('请上传图片')
+        return false;
+      }
+      let datas = new FormData();
+      this.fileList.forEach(async file => {
+
+        datas.append('files', file.raw)
+
+        const data = await this.$axios.post(this.loadImgUrl, datas, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        console.log(data)
+      })
+
+    },
+
+
     closeDialog() {
       this.$parent.isShow = false;
     },

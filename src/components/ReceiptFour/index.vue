@@ -3,14 +3,16 @@
 </template>
 
 <script>
-import ReceiptComm from '@/components/ReceiptComm'
+import ReceiptComm from '@/components/ReceiptComm';
+
 export default {
   components: {
-    ReceiptComm
+    ReceiptComm,
+
   },
   data() {
     return {
-      typeApi: 'success'
+      typeApi: 'finance'
     }
   },
 }

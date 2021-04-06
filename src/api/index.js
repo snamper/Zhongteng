@@ -92,13 +92,6 @@ export const receipt = {
   delete: '/api/v1/repair/removeReceiptInfo',
 }
 
-//回执审核
-export const repExamine = {
-  query: '/api/v1/repair/queryRepExamineList',
-  addOrUpdate: '/api/v1/repair/addOrUpdateRepExamine',
-  delete: '/api/v1/repair/removeRepExamineInfo',
-}
-
 //订单信息
 export const order = {
   query: '/api/v1/order/queryCarOrderList',
@@ -132,4 +125,8 @@ export const stock = {
   query: '/api/v1/product/queryStockList',
   addOrUpdate: '/api/v1/product/addOrUpdateStock',
   delete: '/api/v1/product/removeStockInfo',
+}
+
+export const uploadImg = {
+  upload: '/api/vi/file/upload',
 }

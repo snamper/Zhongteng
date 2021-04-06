@@ -44,7 +44,7 @@ export default {
         { title: '通过', component: ApplySuccess, show: true },
         { title: '失败', component: ApplyReject, show: true },
       ],
-      showArr: ['申请信息', '通过', '失败']
+      showArr: ['申请信息', '通过', '失败',]
     };
   },
 
@@ -55,7 +55,7 @@ export default {
     this.template.forEach(item => {
       if (this.showArr.includes(item.title)) {
         item.show = true;
-      } else if (item.title.includes(this.department)) {
+      } else if (item.title.includes(this.department) || this.department === '系统管理员') {
         item.show = true;
       } else {
         item.show = false;

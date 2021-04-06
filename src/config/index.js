@@ -14,4 +14,4 @@ export const peopleList = {
   examStatus4: '财务审核',
 }
 
-export const department = ['系统管理员', '内勤', '主管', '总经理', '财务']
+export const department = ['系统管理员', '内勤', '主管', '总经理', '财务','售后']
