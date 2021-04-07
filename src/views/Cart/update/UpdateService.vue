@@ -7,6 +7,16 @@
             <el-input v-model="datas.sName"></el-input>
           </el-form-item>
         </el-col>
+
+         <el-col :span="12">
+              <el-form-item label="类型" :label-width="formLabelWidth">
+                <el-select v-model="datas.type" placeholder="请选择" >
+                  <el-option v-for="item in types" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
         <!-- <el-col :span="12">
           <el-form-item label="服务站所在省" prop="sProvince" :label-width="formLabelWidth">
             <el-input v-model="datas.sProvince"></el-input>
@@ -18,7 +28,7 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="12">
-          <el-form-item label="客户所在省" prop="region" :label-width="formLabelWidth">
+          <el-form-item label="所在省" prop="region" :label-width="formLabelWidth">
             <el-cascader size="large" :options="provinceAndCityDataPlus" v-model="datas.region" @change="handleChange"></el-cascader>
           </el-form-item>
         </el-col>
@@ -44,11 +54,17 @@
           </el-form-item>
         </el-col>
 
+
         <el-col :span="12">
-          <el-form-item label="操作人" :label-width="formLabelWidth">
-            <el-input v-model="datas.operator" :disabled="true"></el-input>
-          </el-form-item>
-        </el-col>
+              <el-form-item label="营业执照" :label-width="formLabelWidth">
+                <el-upload list-type="picture-card" multiple :on-preview="handlePictureCardPreview" :on-change="fileChange" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false" :headers="imgHeaders">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+              </el-form-item>
+            </el-col>
+
+ 
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -75,6 +91,7 @@ export default {
     datas: {
       type: Object,
     },
+
   },
 
   data() {
@@ -103,6 +120,20 @@ export default {
       provinceAndCityDataPlus,
       form: {},
       formLabelWidth: "120px",
+      types: [
+        {
+          value: "1",
+          label: "自建型",
+        },
+        {
+          value: "2",
+          label: "合作型",
+        },
+         {
+          value: "3",
+          label: "主机厂",
+        },
+      ],
     };
   },
   computed: {

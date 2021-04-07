@@ -49,6 +49,13 @@ export const insurance = {
   delete: '/api/v1/base/removeInsuranceInfo',
 }
 
+//保险公司
+export const company = {
+  query: '/api/v1/base/queryInsuranceCpList',
+  addOrUpdate: '/api/v1/base/addOrUpdateInsuranceCp',
+  delete: '/api/v1/base/removeInsuranceCpInfo',
+}
+
 //申请信息
 export const applyInfo = {
   query: '/api/v1/repair/queryApplicationList',
@@ -129,4 +136,5 @@ export const stock = {
 
 export const uploadImg = {
   upload: '/api/vi/file/upload',
+  download: '/api/vi/file/download',
 }

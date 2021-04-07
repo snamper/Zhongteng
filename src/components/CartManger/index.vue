@@ -33,9 +33,13 @@
           {{ scope.row.regDate | formatDate }}
         </template>
       </el-table-column>
-      <el-table-column prop="" label="购车发票" width="120" align="center">
+      <el-table-column prop="leaseRoute" label="购车发票" width="120" align="center">
         <template slot-scope="scope">
-          <el-image :src="scope.row.invoice" style="width: 30px; height: 30px" :preview-src-list="scope.row.invoice"></el-image>
+          <!-- <el-image :src="scope.row.invoice" style="width: 30px; height: 30px" :preview-src-list="scope.row.invoice"></el-image> -->
+          <el-tooltip class="item" effect="dark" content="点击查看图片" placement="top">
+            <el-button @click="seeImg(scope.row)" icon="el-icon-picture-outline" circle></el-button>
+          </el-tooltip>
+
         </template>
       </el-table-column>
 
@@ -124,13 +128,14 @@
     <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1">
     </el-pagination>
     <update-cart :isShow="isShow" :selectData="selectData" :update="update" :type="type" ref="updateCart"></update-cart>
+    <SeeImg ref="imgRef" :imgBase64="imgBase64"></SeeImg>
   </div>
 </template>
 
 <script>
-import { cart } from "@/api";
+import { cart, uploadImg } from "@/api";
 import updateCart from "@/components/UpdateCart";
-
+import SeeImg from '@/components/SeeImg'
 export default {
   data() {
     return {
@@ -142,6 +147,7 @@ export default {
       searchValue: "",
       multipleSelection: [],
       type: "",
+      imgBase64: '',
       json_fields: {
         车辆id: "carId",
         车架号: "vin",
@@ -197,11 +203,29 @@ export default {
   },
   components: {
     updateCart,
+    SeeImg
   },
   created() {
     this.getData();
   },
   methods: {
+    seeImg(raw) {
+      const { leaseRoute } = raw
+
+      if (!leaseRoute) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: leaseRoute }).then(res => {
+          let img = res.data;
+          this.imgBase64 = img;
+          console.log(img)
+          this.$refs.imgRef.dialogVisible = true;
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+
+    },
     getData() {
       const { page, pageSize } = this;
       this.$axios.post(cart.query, { vin: this.searchValue }).then((res) => {

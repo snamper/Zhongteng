@@ -93,6 +93,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
+
             <el-col :span="12">
               <el-form-item label="合格证">
                 <el-select v-model="selectData.certificate" placeholder="请选择">
@@ -142,11 +143,11 @@
 
             <el-col :span="12">
               <el-form-item label="发票">
-
-                <el-upload list-type="picture-card" multiple :on-preview="handlePictureCardPreview" :on-change="fileChange" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false" :headers="imgHeaders">
+                <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle" ref="imgupload"></ImageUpload>
+                <!-- <el-upload list-type="picture-card" multiple :on-preview="handlePictureCardPreview" :on-change="fileChange" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false" :headers="imgHeaders">
                   <i class="el-icon-plus"></i>
                 </el-upload>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -158,18 +159,19 @@
         <el-button type="primary" @click="handleClose">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="">
-    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { order, customer, cartModel, factory, uploadImg } from "@/api";
-
+import ImageUpload from '@/components/ImageUpload'
 export default {
   name: "updateCart",
+  components: {
+    ImageUpload
+  },
   data() {
     return {
       datas: {},
@@ -201,7 +203,7 @@ export default {
       imgHeaders: {
         'Content-Type': 'multipart/form-data'
       },
-      fileList: [],
+
       dialogVisible: false,
     };
   },
@@ -228,7 +230,7 @@ export default {
   },
   watch: {
     isShow: function () {
-      this.fileList = [];
+      this.$refs.imgupload.fileList = []
     }
   },
   computed: {
@@ -238,43 +240,12 @@ export default {
     },
   },
   methods: {
-    fileChange(file, fileList) {
-
-      this.fileList = fileList;
-    },
-    fileRemove(file, fileList) {
-      this.fileList = fileList;
-    },
-    handleRemove(file, fileList) {
-      let uid = file.uid
-
-
-      this.$_.remove(this.fileList, { uid })
-
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    submitUpload() {
-
-      if (this.fileList.length <= 0) {
-        this.$message.warning('请上传图片')
-        return false;
+    uploadHandle(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data
+        this.selectData.leaseRoute = imgUrl
+        this.$message.success('图片上传成功,请点击确认后保存图片!')
       }
-      let datas = new FormData();
-      this.fileList.forEach(async file => {
-
-        datas.append('files', file.raw)
-
-        const data = await this.$axios.post(this.loadImgUrl, datas, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        console.log(data)
-      })
-
     },
 
 

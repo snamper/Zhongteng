@@ -55,7 +55,7 @@ export default {
     this.template.forEach(item => {
       if (this.showArr.includes(item.title)) {
         item.show = true;
-      } else if (item.title.includes(this.department)) {
+      } else if (item.title.includes(this.department)|| this.department === '系统管理员') {
         item.show = true;
       } else {
         item.show = false;

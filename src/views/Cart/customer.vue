@@ -136,6 +136,7 @@ export default {
           }
         });
     },
+
     handleEdit(index, row) {
       let { ctProvince, ctCity } = row;
       let cityCode = '';
