@@ -138,3 +138,6 @@ export const uploadImg = {
   upload: '/api/vi/file/upload',
   download: '/api/vi/file/download',
 }
+export const totalApi = {
+  query: '/api/v1/base/queryFullCarInfoByParam',
+}

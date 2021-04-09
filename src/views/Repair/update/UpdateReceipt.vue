@@ -1,7 +1,8 @@
 <template>
-  <el-dialog title="回执信息编辑" :visible.sync="isShow">
+  <el-dialog :title="type" :visible.sync="isShow">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
+
         <el-col :span="12">
           <el-form-item prop="vin" label="车架号" :label-width="formLabelWidth">
             <el-input v-model="datas.vin"></el-input>
@@ -9,11 +10,7 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            prop="oldPart1"
-            label="旧配件"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="oldPart1" label="旧配件" :label-width="formLabelWidth">
             <el-input v-model="datas.oldPart1"></el-input>
           </el-form-item>
         </el-col>
@@ -32,51 +29,32 @@
         </el-col> -->
 
         <el-col :span="12">
-          <el-form-item
-            prop="ctName"
-            label="客户名称"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="datas.remarks"></el-input>
+          <el-form-item prop="ctName" label="客户名称" :label-width="formLabelWidth">
+            <el-input v-model="datas.ctName"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
-            prop="remarks"
-            label="备注"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="remarks" label="备注" :label-width="formLabelWidth">
             <el-input v-model="datas.remarks"></el-input>
           </el-form-item>
         </el-col>
-
 
         <el-col :span="12">
           <el-form-item label="结算清单" :label-width="formLabelWidth">
-            <el-upload class="avatar-uploader" :show-file-list="false">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle" ref="imgupload"></ImageUpload>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
           <el-form-item label="增值税发票" :label-width="formLabelWidth">
-            <el-upload class="avatar-uploader" :show-file-list="false">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle1" ref="imgupload1"></ImageUpload>
           </el-form-item>
         </el-col>
 
-
-         <el-col :span="12">
+        <el-col :span="12">
           <el-form-item label="付款申请书" :label-width="formLabelWidth">
-            <el-upload class="avatar-uploader" :show-file-list="false">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle2" ref="imgupload2"></ImageUpload>
           </el-form-item>
         </el-col>
 
@@ -91,7 +69,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { receipt } from "@/api";
+import { receipt, uploadImg } from "@/api";
+import ImageUpload from "@/components/ImageUpload";
 export default {
   props: {
     isShow: {
@@ -105,6 +84,10 @@ export default {
     datas: {
       type: Object,
     },
+  },
+
+  components: {
+    ImageUpload
   },
   data() {
     return {
@@ -126,6 +109,7 @@ export default {
 
       form: {},
       formLabelWidth: "120px",
+      loadImgUrl: uploadImg.upload
     };
   },
   computed: {
@@ -140,8 +124,36 @@ export default {
         });
       }
     },
+    isShow: function () {
+      this.$nextTick(() => {
+        this.$refs.imgupload.fileList = [];
+        this.$refs.imgupload1.fileList = [];
+        this.$refs.imgupload2.fileList = [];
+      })
+    },
   },
   methods: {
+    uploadHandle(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.listRoute = imgUrl;
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
+    uploadHandle1(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.invoiceRoute = imgUrl;
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
+    uploadHandle2(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.appRoute = imgUrl;
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
     send() {
       const { $axios, datas } = this;
       datas.operator = this.user_info.user_name;

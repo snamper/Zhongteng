@@ -67,19 +67,13 @@
 
         <el-col :span="12">
           <el-form-item label="故障图片" :label-width="formLabelWidth">
-            <el-upload class="avatar-uploader" :show-file-list="false">
-              <img v-if="imageUrl" :src="datas.troublePic" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle1" ref="imgupload1"></ImageUpload>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
           <el-form-item label="费用预估单" :label-width="formLabelWidth">
-            <el-upload class="avatar-uploader" :show-file-list="false">
-              <img v-if="imageUrl" :src="datas.workHours" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle2" ref="imgupload2"></ImageUpload>
           </el-form-item>
         </el-col>
 
@@ -94,7 +88,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { applyInfo, services } from "@/api";
+import { applyInfo, services, uploadImg } from "@/api";
+import ImageUpload from "@/components/ImageUpload";
 export default {
   props: {
     isShow: {
@@ -103,7 +98,7 @@ export default {
     },
     type: {
       type: String,
-      default: "",
+      required: true,
     },
     datas: {
       type: Object,
@@ -115,6 +110,9 @@ export default {
       return this.type == "编辑" ? "编辑车辆信息" : "添加车辆信息";
     },
   },
+  components: {
+    ImageUpload
+  },
   data() {
     return {
       cartServices: [],
@@ -122,9 +120,7 @@ export default {
         ctName: [
           { required: true, message: "请输入客户名称", trigger: "blur" },
         ],
-        cName: [
-          { required: true, message: "请输入服务站名称", trigger: "blur" },
-        ],
+
       },
       options: [
         {
@@ -137,6 +133,7 @@ export default {
         },
       ],
       formLabelWidth: "120px",
+      loadImgUrl: uploadImg.upload
     };
   },
 
@@ -152,9 +149,34 @@ export default {
         });
       }
     },
+    isShow: function () {
+
+      this.$nextTick(() => {
+        console.log(this.$refs.imgupload)
+        this.$refs.imgupload1.fileList = [];
+        this.$refs.imgupload2.fileList = [];
+      })
+
+    }
   },
 
   methods: {
+    uploadHandle1(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.picRoute = imgUrl;
+
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
+    uploadHandle2(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.listRoute = imgUrl;
+
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
     getDataServices() {
       this.$axios
         .post(services.query, { sName: this.searchValue })
@@ -195,19 +217,25 @@ export default {
         });
     },
     update(formName) {
+
       const { type } = this;
+      console.log(type)
       if (type === "编辑") {
+        this.$refs[formName].validate((valid) => {
+          console.log(valid)
+          if (valid) {
+            this.send();
+          } else {
+            this.$message.error("验证未通过");
+          }
+        });
+      } else if (type === "新增") {
+
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.send();
           } else {
-            console.log("验证未通过");
-          }
-        });
-      } else if (type === "新增") {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.send();
+            this.$message.error("验证未通过");
           }
         });
       }

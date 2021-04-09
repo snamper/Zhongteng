@@ -8,14 +8,14 @@
           </el-form-item>
         </el-col>
 
-         <el-col :span="12">
-              <el-form-item label="类型" :label-width="formLabelWidth">
-                <el-select v-model="datas.type" placeholder="请选择" >
-                  <el-option v-for="item in types" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
+        <el-col :span="12">
+          <el-form-item label="类型" :label-width="formLabelWidth">
+            <el-select v-model="datas.type" placeholder="请选择">
+              <el-option v-for="item in types" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
 
         <!-- <el-col :span="12">
           <el-form-item label="服务站所在省" prop="sProvince" :label-width="formLabelWidth">
@@ -54,17 +54,12 @@
           </el-form-item>
         </el-col>
 
-
         <el-col :span="12">
-              <el-form-item label="营业执照" :label-width="formLabelWidth">
-                <el-upload list-type="picture-card" multiple :on-preview="handlePictureCardPreview" :on-change="fileChange" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false" :headers="imgHeaders">
-                  <i class="el-icon-plus"></i>
-                </el-upload>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-              </el-form-item>
-            </el-col>
+          <el-form-item label="营业执照" :label-width="formLabelWidth">
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle" ref="imgupload"></ImageUpload>
+          </el-form-item>
+        </el-col>
 
- 
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -76,8 +71,9 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { services } from "@/api";
+import { services, uploadImg } from "@/api";
 import { provinceAndCityDataPlus, CodeToText } from 'element-china-area-data'
+import ImageUpload from "@/components/ImageUpload";
 export default {
   props: {
     isShow: {
@@ -93,7 +89,12 @@ export default {
     },
 
   },
-
+  components: {
+    ImageUpload
+  },
+  created() {
+    this.loadImgUrl = uploadImg.upload;
+  },
   data() {
     return {
       rules: {
@@ -129,7 +130,7 @@ export default {
           value: "2",
           label: "合作型",
         },
-         {
+        {
           value: "3",
           label: "主机厂",
         },
@@ -151,9 +152,20 @@ export default {
         this.datas.operator = this.user_info.user_name;
       }
     },
+    isShow: function () {
+      this.$refs.imgupload.fileList = [];
+
+    },
   },
 
   methods: {
+    uploadHandle(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.licRoute = imgUrl;
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
     closeDialog() {
       this.$parent.isShow = false;
     },

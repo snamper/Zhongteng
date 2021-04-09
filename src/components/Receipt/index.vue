@@ -11,8 +11,7 @@
       </el-row>
       <el-button type="primary" @click="addCart">增加</el-button>
     </div>
-    <el-table :data="cartList" style="width: 100%" height="700" 
-    @row-click="hoverHandle" ref="refTable" :expand-row-keys="expands" :row-key="getRowKeys">
+    <el-table :data="cartList" style="width: 100%" height="700" @row-click="hoverHandle" ref="refTable" :expand-row-keys="expands" :row-key="getRowKeys">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -24,23 +23,27 @@
             </el-form-item>
 
             <el-form-item label="结算清单">
-              <span>{{ props.row.list }}</span>
+              <el-tooltip class="item" effect="dark" content="点击查看图片" placement="right">
+                <el-button @click="seeProRoute(props.row.listRoute)" icon="el-icon-picture" circle></el-button>
+              </el-tooltip>
             </el-form-item>
             <el-form-item label="增值税发票">
-              <span>{{ props.row.invoice }}</span>
+              <el-tooltip class="item" effect="dark" content="点击查看图片" placement="right">
+                <el-button @click="seeProRoute(props.row.invoiceRoute)" icon="el-icon-picture" circle></el-button>
+              </el-tooltip>
             </el-form-item>
             <el-form-item label="付款申请书">
-              <span>{{ props.row.appPayment }}</span>
+              <el-tooltip class="item" effect="dark" content="点击查看图片" placement="right">
+                <el-button @click="seeProRoute(props.row.appRoute)" icon="el-icon-picture" circle></el-button>
+              </el-tooltip>
             </el-form-item>
 
-         
             <el-form-item label="旧配件">
               <el-button type="text" label="旧配件" @click="openlist">{{
                 props.row.oldPart1
               }}</el-button>
             </el-form-item>
 
-  
             <el-form-item label="审核状态">
               <el-button size="mini" round @click.stop="seeStatus(props.row)">查看审核状态</el-button>
             </el-form-item>
@@ -56,7 +59,7 @@
       </el-table-column>
       <el-table-column label="车架号" prop="vin"> </el-table-column>
       <el-table-column label="客户名称" prop="ctName"> </el-table-column>
-      
+
       <el-table-column label="申请人" prop="operator"> </el-table-column>
       <el-table-column label="描述" prop="remarks"> </el-table-column>
       <el-table-column label="操作" fixed="right" width="200">
@@ -76,14 +79,16 @@
     <ClickSatus :statusData="statusData" :steepVisible="steepVisible" ref="statusRef"></ClickSatus>
     <UpdateReceipt :isShow="isShow" :datas="selectData" :update="update" :type="type"></UpdateReceipt>
     <receipt :isShow="isShow" :datas="selectData" :update="update" :type="type"></receipt>
+    <SeeImg ref="imgRef" :imgBase64="imgBase64"></SeeImg>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { receipt } from "@/api";
+import { receipt, uploadImg } from "@/api";
 import UpdateReceipt from "@/views/Repair/update/UpdateReceipt";
 import ClickSatus from "@/components/ClickSatus";
+import SeeImg from '@/components/SeeImg'
 export default {
   props: {
     datas: {
@@ -103,7 +108,7 @@ export default {
       getRowKeys(row) {
         return row.receiptId;
       },
-
+      imgBase64: '',
 
     };
   },
@@ -119,13 +124,31 @@ export default {
   components: {
     receipt,
     UpdateReceipt,
-    ClickSatus
+    ClickSatus,
+    SeeImg
   },
   created() {
     this.getData();
   },
 
   methods: {
+    seeProRoute(imgUrl) {
+
+
+      if (!imgUrl) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: imgUrl }).then(res => {
+          let img = res.data;
+          this.imgBase64 = img;
+          console.log(img)
+          this.$refs.imgRef.dialogVisible = true;
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+
+    },
     hoverHandle(row, column, cell, event) {
       // this.$refs.refTable.toggleRowExpansion(row);
       // console.log(row, column, cell, event)
@@ -234,6 +257,7 @@ export default {
     addCart() {
       this.selectData = {};
       this.isShow = true;
+      this.type = '新增'
     },
     seeStatus(row) {
       this.steepVisible = true;

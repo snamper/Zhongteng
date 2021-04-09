@@ -3,10 +3,7 @@
     <div class="params">
       <el-row>
         <el-col :span="18">
-          <el-input
-            v-model="searchValue"
-            placeholder="请输入服务站名称"
-          ></el-input>
+          <el-input v-model="searchValue" placeholder="请输入服务站名称"></el-input>
         </el-col>
         <el-col :span="6">
           <el-button type="primary" @click="queryClick">查询</el-button>
@@ -15,30 +12,21 @@
       <el-button type="primary" @click="addCart">增加</el-button>
       <el-button type="danger" @click="deletesAll">批量删除</el-button>
 
-      <download-excel
-        class="export-excel-wrapper"
-        :data="cartList"
-        :fields="json_fields"
-      >
+      <download-excel class="export-excel-wrapper" :data="cartList" :fields="json_fields">
         <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
         <el-button type="primary" size="small">导出EXCEL</el-button>
       </download-excel>
     </div>
-    <el-table
-      :data="cartList"
-      style="width: 100%"
-      border
-      @selection-change="handleSelectionChange"
-    >
+    <el-table :data="cartList" style="width: 100%" border @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="serviceId" label="服务站编码" width="100">
       </el-table-column>
 
       <el-table-column prop="type" label="服务站类型" align="center" width="150">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.type == 1" >自建型</el-tag>
-          <el-tag v-if="scope.row.type == 2" >合作型</el-tag>
-          <el-tag v-if="scope.row.type == 3" >主机厂</el-tag>
+          <el-tag v-if="scope.row.type == 1">自建型</el-tag>
+          <el-tag v-if="scope.row.type == 2">合作型</el-tag>
+          <el-tag v-if="scope.row.type == 3">主机厂</el-tag>
         </template>
       </el-table-column>
 
@@ -54,13 +42,11 @@
       <el-table-column prop="sDepartment" label="部门"> </el-table-column>
       <el-table-column prop="sPhone" label="联系方式" width="120">
       </el-table-column>
-      <el-table-column prop="license" label="营业执照" width="120" align="center">
+      <el-table-column prop="licRoute" label="营业执照" width="120" align="center">
         <template slot-scope="scope">
-          <el-image icon="el-icon-tickets"
-            :src="scope.row.license"
-            style="width: 30px; height: 30px"
-            :preview-src-list="scope.row.license"
-          ></el-image>
+          <el-tooltip class="item" effect="dark" content="点击查看图片" placement="top">
+            <el-button @click="seeLicRoute(scope.row)" icon="el-icon-picture" circle></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -72,45 +58,25 @@
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 
-          <el-popconfirm
-            confirm-button-text="好的"
-            cancel-button-text="不用了"
-            icon="el-icon-info"
-            icon-color="red"
-            title="这是一段内容确定删除吗？"
-            @confirm="handleDelete(scope.$index, scope.row)"
-          >
-            <el-button size="mini" type="danger" slot="reference"
-              >删除</el-button
-            >
+          <el-popconfirm confirm-button-text="好的" cancel-button-text="不用了" icon="el-icon-info" icon-color="red" title="这是一段内容确定删除吗？" @confirm="handleDelete(scope.$index, scope.row)">
+            <el-button size="mini" type="danger" slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page.sync="page"
-      :page-size="pageSize"
-      layout="total, prev, pager, next"
-      :total="totalArr.length - 1"
-    >
+    <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1">
     </el-pagination>
-    <UpdateService
-      :isShow="isShow"
-      :datas="selectData"
-      :update="update"
-      :type="type"
-    ></UpdateService>
+    <UpdateService :isShow="isShow" :datas="selectData" :update="update" :type="type"></UpdateService>
+    <SeeImg ref="imgRef" :imgBase64="imgBase64"></SeeImg>
   </div>
 </template>
 
 <script>
-import { services } from "@/api";
+import { services, uploadImg } from "@/api";
 import UpdateService from "./update/UpdateService";
+import SeeImg from '@/components/SeeImg'
 import {
   TextToCode,
   provinceAndCityDataPlus,
@@ -138,15 +104,35 @@ export default {
         操作人: "operator",
         操作时间: "operatorDate",
       },
+      imgBase64: ''
     };
   },
   components: {
     UpdateService,
+    SeeImg
   },
   created() {
     this.getData();
   },
   methods: {
+    seeLicRoute(raw) {
+      const { licRoute } = raw
+      let _self = this;
+      if (!licRoute) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: licRoute }).then(res => {
+          let img = res.data;
+          _self.imgBase64 = img;
+
+          _self.$refs.imgRef.dialogVisible = true;
+          console.log(_self.$refs.imgRef.dialogVisible)
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+
+    },
     getData() {
       this.$axios
         .post(services.query, { sName: this.searchValue })
@@ -179,7 +165,7 @@ export default {
       this.isShow = true;
     },
     //修改内容
-    update() {},
+    update() { },
     //查询内容
     queryClick() {
       if (this.searchValue == "") {

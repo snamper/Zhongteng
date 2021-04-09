@@ -16,8 +16,8 @@
         </el-date-picker> -->
 
         </div>
-        <echarts-box :options="option2" id="data-echarts1"></echarts-box>
-
+        <!-- <echarts-box :options="option1" id="data-echarts1"></echarts-box> -->
+        <StatusEcharts :options='options2'></StatusEcharts>
       </div>
 
       <div class="left">
@@ -29,7 +29,7 @@
 
 <script>
 import { totalApi } from "@/api";
-
+import StatusEcharts from '@/components/EachartsTem'
 import * as echarts from "echarts";
 import { statusEcharts } from '@/utils'
 const data = [220, 182, 191, 234, 290, 330, 310];
@@ -347,30 +347,54 @@ export default {
     return {
       options: option,
       option1: option1,
-      option2: '',
+      options2: [],
       time: '',
       params: {
-        ctName: ''
+        ctName: '淮北市分公司'
       },
     };
   },
-
-
+  components: {
+    StatusEcharts
+  },
   created() {
-    this.getData();
+
   },
   methods: {
     async getData() {
-      let { params } = this;
-
-      let data = await this.$axios.post(totalApi.query, { ctName: params.ctName })
+      let { options2, params } = this;
+      options2 = []
+      let data = await this.$axios.post(totalApi.query, { ctName: this.ctName })
 
       if (data && data.data.errCode === 200) {
         let result = data.data.data;
 
+        let grbyResult = this.$_.groupBy(result, 'delStatus');
+        Object.keys(grbyResult).forEach(item => {
+          if (item == 'null') {
 
+            grbyResult[0].push(...grbyResult[item])
+            delete grbyResult[item]
+          }
+        })
 
-        this.option2 = statusEcharts(result, params.ctName)
+        Object.keys(grbyResult).forEach(item => {
+
+          if (item == 1) {
+            options2.push({
+              name: params.ctName,
+              value: grbyResult[item].length,
+              status: '已交付'
+            })
+          } else {
+            options2.push({
+              name: params.ctName,
+              value: grbyResult[item].length,
+              status: '未交付'
+            })
+          }
+        })
+        let resultOptions = statusEcharts(options2, this.ctName)
 
       } else {
         this.$message.error(data)
@@ -378,7 +402,12 @@ export default {
     },
     queryHandle() {
 
+      const { params } = this;
+      if (!params.ctName) {
 
+        this.$message.warning('请输入查询条件')
+        return false;
+      }
       this.getData();
     }
 

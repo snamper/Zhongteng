@@ -33,13 +33,31 @@
           {{ scope.row.regDate | formatDate }}
         </template>
       </el-table-column>
+
       <el-table-column prop="leaseRoute" label="购车发票" width="120" align="center">
         <template slot-scope="scope">
           <!-- <el-image :src="scope.row.invoice" style="width: 30px; height: 30px" :preview-src-list="scope.row.invoice"></el-image> -->
           <el-tooltip class="item" effect="dark" content="点击查看图片" placement="top">
-            <el-button @click="seeImg(scope.row)" icon="el-icon-picture-outline" circle></el-button>
+            <el-button @click="seeImg(scope.row)" icon="el-icon-picture" circle></el-button>
           </el-tooltip>
+        </template>
+      </el-table-column>
 
+      <el-table-column prop="proRoute" label="产权证" width="120" align="center">
+        <template slot-scope="scope">
+          <!-- <el-image :src="scope.row.invoice" style="width: 30px; height: 30px" :preview-src-list="scope.row.invoice"></el-image> -->
+          <el-tooltip class="item" effect="dark" content="点击查看图片" placement="top">
+            <el-button @click="seeProRoute(scope.row)" icon="el-icon-picture" circle></el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="licRoute" label="行驶证" width="120" align="center">
+        <template slot-scope="scope">
+          <!-- <el-image :src="scope.row.invoice" style="width: 30px; height: 30px" :preview-src-list="scope.row.invoice"></el-image> -->
+          <el-tooltip class="item" effect="dark" content="点击查看图片" placement="top">
+            <el-button @click="seeLicRoute(scope.row)" icon="el-icon-picture" circle></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -60,12 +78,16 @@
           <el-tag v-if="scope.row.delStatus == 1" type="success">已交付</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="carProperty" label="车辆产权证" align="center" width="150">
+
+      <!-- <el-table-column prop="carProperty" label="车辆产权证" align="center" width="150">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.carProperty == 0" type="danger">未确认</el-tag>
           <el-tag v-if="scope.row.carProperty == 1" type="success">已确认</el-tag>
         </template>
       </el-table-column>
+
+       -->
+
       <!-- 
       <el-table-column
         prop="carEqual"
@@ -79,12 +101,12 @@
         </template>
       </el-table-column>
        -->
-      <el-table-column prop="carLicense" label="行驶证">
+      <!-- <el-table-column prop="carLicense" label="行驶证">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.carLicense == 0" type="danger">未确认</el-tag>
           <el-tag v-if="scope.row.carLicense == 1" type="success">已确认</el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <!-- <el-table-column prop="certificate" label="合格证">
         <template slot-scope="scope">
@@ -116,9 +138,7 @@
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <!-- <el-popconfirm title="是否删除此条数据?">
-           
-          </el-popconfirm> -->
+
           <el-popconfirm confirm-button-text="好的" cancel-button-text="不用了" icon="el-icon-info" icon-color="red" title="是否删除此条数据?" @confirm="handleDelete(scope.$index, scope.row)">
             <el-button size="mini" type="danger" slot="reference">删除</el-button>
           </el-popconfirm>
@@ -216,6 +236,40 @@ export default {
         this.$message.error('暂无上传图片')
       } else {
         this.$axios.post(uploadImg.download, { fileName: leaseRoute }).then(res => {
+          let img = res.data;
+          this.imgBase64 = img;
+          console.log(img)
+          this.$refs.imgRef.dialogVisible = true;
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+
+    },
+    seeProRoute(raw) {
+      const { proRoute } = raw
+
+      if (!proRoute) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: proRoute }).then(res => {
+          let img = res.data;
+          this.imgBase64 = img;
+          console.log(img)
+          this.$refs.imgRef.dialogVisible = true;
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+
+    },
+    seeLicRoute(raw) {
+      const { licRoute } = raw
+
+      if (!licRoute) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: licRoute }).then(res => {
           let img = res.data;
           this.imgBase64 = img;
           console.log(img)

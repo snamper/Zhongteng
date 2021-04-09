@@ -2,26 +2,26 @@
   <div class="updateCart">
     <el-dialog :title="title" :visible.sync="isShow" width="50%" :fullscreen="false" @close="closeDialog" :modal-append-to-body="false">
       <div class="body">
-        <el-form ref="form" :model="selectData" label-width="100px">
+        <el-form ref="form" :model="selectData" label-width="100px" :rules="rules">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="车架号">
+              <el-form-item label="车架号" prop="vin">
                 <el-input v-model="selectData.vin"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="发动机号">
+              <el-form-item label="发动机号" prop="engine">
                 <el-input v-model="selectData.engine"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="车牌号">
+              <el-form-item label="车牌号" prop="carNumber">
                 <el-input v-model="selectData.carNumber"></el-input>
               </el-form-item>
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="车型名称">
+              <el-form-item label="车型名称" prop="carName">
                 <el-select v-model="selectData.carName" filterable placeholder="请选择">
                   <el-option v-for="item in cartModel" :key="item.value" :label="item.carName" :value="item.carName">
                   </el-option>
@@ -30,7 +30,7 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="客户名称">
+              <el-form-item label="客户名称" prop="ctName">
                 <el-select v-model="selectData.ctName" filterable placeholder="请选择">
                   <el-option v-for="item in cartCustomer" :key="item.value" :label="item.ctName" :value="item.ctName">
                   </el-option>
@@ -48,12 +48,7 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="单日租金">
-                <el-input v-model="selectData.carRent"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="车辆订单编码">
+              <el-form-item label="订单编码" prop="orderId">
                 <el-select v-model="selectData.orderId" filterable placeholder="请选择">
                   <el-option v-for="item in cartOrder" :key="item.value" :label="item.orderId" :value="item.orderId">
                   </el-option>
@@ -69,42 +64,9 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item label="车辆产权证">
-                <el-select v-model="selectData.carProperty" placeholder="请选择">
-                  <el-option v-for="item in oStatus" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="一致性证书">
-                <el-select v-model="selectData.carEqual" placeholder="请选择">
-                  <el-option v-for="item in oStatus" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="行驶证">
-                <el-select v-model="selectData.carLicense" placeholder="请选择">
-                  <el-option v-for="item in oStatus" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
 
             <el-col :span="12">
-              <el-form-item label="合格证">
-                <el-select v-model="selectData.certificate" placeholder="请选择">
-                  <el-option v-for="item in oStatus" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-              <el-form-item label="上牌日期">
+              <el-form-item label="注册日期">
                 <el-date-picker v-model="selectData.regDate" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
               </el-form-item>
@@ -116,30 +78,18 @@
               </el-form-item>
             </el-col>
 
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-form-item label="交付日期">
-                <el-date-picker v-model="selectData.deliveryDate" type="datetime" placeholder="选择日期时间">
+                <el-date-picker
+                  v-model="selectData.deliveryDate"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                >
                 </el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item label="租赁开始日期">
-                <el-date-picker v-model="selectData.leaseBdate" type="datetime" placeholder="选择日期时间">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="租赁截止日期">
-                <el-date-picker v-model="selectData.leaseEdate" type="datetime" placeholder="选择日期时间">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="交付日期">
-                <el-date-picker v-model="selectData.deliveryDate" type="datetime" placeholder="选择日期时间">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
+
+          -->
 
             <el-col :span="12">
               <el-form-item label="发票">
@@ -150,30 +100,50 @@
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
               </el-form-item>
             </el-col>
+
+            <el-col :span="12">
+              <el-form-item label="行驶证">
+                <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle1" ref="imgupload1"></ImageUpload>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item label="产权证">
+                <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle2" ref="imgupload2"></ImageUpload>
+              </el-form-item>
+            </el-col>
+
           </el-row>
         </el-form>
       </div>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="$parent.isShow = false">取 消</el-button>
-        <el-button type="primary" @click="handleClose">确 定</el-button>
+        <el-button type="primary" @click="handleClose('form')">确 定</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { order, customer, cartModel, factory, uploadImg } from "@/api";
-import ImageUpload from '@/components/ImageUpload'
+import ImageUpload from "@/components/ImageUpload";
 export default {
   name: "updateCart",
   components: {
-    ImageUpload
+    ImageUpload,
   },
   data() {
     return {
+      rules: {
+        vin: [{ required: true, message: "请输入", trigger: "blur" }],
+        engine: [{ required: true, message: "请输入", trigger: "blur" }],
+        carNumber: [{ required: true, message: "请输入", trigger: "blur" }],
+        carName: [{ required: true, message: "请输入", trigger: "blur" }],
+        ctName: [{ required: true, message: "请输入", trigger: "blur" }],
+        orderId: [{ required: true, message: "请输入", trigger: "blur" }],
+      },
       datas: {},
       cartFactory: [],
       cartModel: [],
@@ -199,9 +169,11 @@ export default {
           label: "未确认",
         },
       ],
-      loadImgUrl: '',
+      loadImgUrl: "",
+      loadLicUrl: "",
+      loadProUrl: "",
       imgHeaders: {
-        'Content-Type': 'multipart/form-data'
+        "Content-Type": "multipart/form-data",
       },
 
       dialogVisible: false,
@@ -212,7 +184,8 @@ export default {
     this.getDataCarType();
     this.getDataOrder();
     this.getDataCustomer();
-    this.loadImgUrl = uploadImg.upload
+    this.loadImgUrl = uploadImg.upload;
+
   },
   props: {
     isShow: {
@@ -230,9 +203,14 @@ export default {
   },
   watch: {
     isShow: function () {
-      this.$refs.imgupload.fileList = []
-    }
+      this.$nextTick(() => {
+        this.$refs.imgupload.fileList = [];
+        this.$refs.imgupload1.fileList = [];
+        this.$refs.imgupload2.fileList = [];
+      })
+    },
   },
+
   computed: {
     ...mapGetters(["user_info"]),
     title() {
@@ -242,22 +220,40 @@ export default {
   methods: {
     uploadHandle(result) {
       if (result instanceof Array) {
-        let imgUrl = result[0].data
-        this.selectData.leaseRoute = imgUrl
-        this.$message.success('图片上传成功,请点击确认后保存图片!')
+        let imgUrl = result[0].data;
+        this.selectData.leaseRoute = imgUrl;
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
       }
     },
+    uploadHandle1(result) {
+      console.log(result)
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.selectData.proRoute = imgUrl;
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
+    uploadHandle2(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.selectData.licRoute = imgUrl;
+
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
+
 
 
     closeDialog() {
       this.$parent.isShow = false;
     },
-    handleClose() {
+    handleClose(formName) {
       if (this.type == "编辑") {
         this.$parent.isShow = false;
         this.selectData.operator = this.user_info.user_name;
         this.selectData.operatorDate = Date.now();
         this.$parent.update(this.selectData);
+
       } else {
         this.selectData.operator = this.user_info.user_name;
         this.selectData.operatorDate = Date.now();
@@ -265,6 +261,7 @@ export default {
         this.$parent.addCartClick(this.selectData);
       }
     },
+
     getDataFactory() {
       this.$axios.post(factory.query, { vin: this.searchValue }).then((res) => {
         const data = res.data;
@@ -305,18 +302,23 @@ export default {
       });
     },
     getDataCustomer() {
-      this.$axios.post(customer.queryCustomerList, { ctName: this.ctName, }).then((res) => {
-        const data = res.data;
-        if (data.errCode == 200) {
-          this.cartCustomer = this.paging(this.page, this.pageSize, data.data);
-          this.totalArr = data.data;
-          this.type = "";
-        } else {
-          this.$message(data.msg);
-        }
-      });
+      this.$axios
+        .post(customer.queryCustomerList, { ctName: this.ctName })
+        .then((res) => {
+          const data = res.data;
+          if (data.errCode == 200) {
+            this.cartCustomer = this.paging(
+              this.page,
+              this.pageSize,
+              data.data
+            );
+            this.totalArr = data.data;
+            this.type = "";
+          } else {
+            this.$message(data.msg);
+          }
+        });
     },
-
   },
 };
 </script>

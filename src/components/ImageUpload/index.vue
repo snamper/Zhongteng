@@ -31,7 +31,7 @@ export default {
       },
       dialogVisible: false,
       dialogImageUrl: '',
-      imgType: ['gif', 'jpg', 'jpeg', 'png', 'JPG', 'PNG']
+      imgType: ['gif', 'jpg', 'jpeg', 'png']
     }
   },
   methods: {
@@ -55,9 +55,6 @@ export default {
       if (isJPG && isLt2M) {
         this.fileList = fileList;
       }
-
-
-
     },
     fileRemove(file, fileList) {
       this.fileList = fileList;
@@ -74,16 +71,17 @@ export default {
       this.dialogVisible = true;
     },
     submitUpload() {
+
       const promiseLisr = [];
       if (this.fileList.length <= 0) {
         this.$message.warning('请上传图片')
         return false;
       }
+      console.log(this.fileList.length);
       let datas = new FormData();
+
       this.fileList.forEach(async file => {
-
         datas.append('files', file.raw)
-
         const data = this.$axios.post(this.url, datas, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -96,6 +94,7 @@ export default {
       }).catch(e => {
         this.$emit('uploadHandle', e)
       })
+
     },
 
   },

@@ -64,7 +64,11 @@
             <el-input v-model="datas.traCost"></el-input>
           </el-form-item>
         </el-col>
-
+        <el-col :span="12">
+          <el-form-item label="保单" :label-width="formLabelWidth">
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle" ref="imgupload"></ImageUpload>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -75,8 +79,9 @@
 </template>
 
 <script>
+import ImageUpload from "@/components/ImageUpload";
 import { mapGetters } from "vuex";
-import { insurance } from "@/api";
+import { insurance, uploadImg } from "@/api";
 export default {
   props: {
     isShow: {
@@ -95,7 +100,9 @@ export default {
       type: Object,
     },
   },
-
+  components: {
+    ImageUpload
+  },
   data() {
     return {
       rules: {
@@ -131,7 +138,7 @@ export default {
           { required: true, message: "请输入交强险费用", trigger: "blur" },
         ],
       },
-
+      loadImgUrl: uploadImg.upload,
       form: {},
       formLabelWidth: "120px",
     };
@@ -151,9 +158,26 @@ export default {
         this.datas.operator = this.user_info.user_name;
       }
     },
+    isShow: function () {
+
+      this.$nextTick(() => {
+
+        this.$refs.imgupload.fileList = [];
+
+      })
+
+    }
   },
 
   methods: {
+    uploadHandle(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.policyRoute = imgUrl;
+
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
     closeDialog() {
       this.$parent.isShow = false;
     },

@@ -25,6 +25,9 @@ export default {
       this.srcList = []
       this.url = 'data:image/png;base64,' + val;
       this.srcList.push(this.url)
+    },
+    dialogVisible: function (val) {
+      console.log(val)
     }
   },
   data() {

@@ -24,18 +24,17 @@ axios.interceptors.response.use(
   },
   (error) => {
     //关闭加载
-    
+
     NProgress.done()
     if (error.response) {
-      if(error.response.data.message=='token has expired'){
+      if (error.response.data.message == 'token has expired') {
         Message.error('用户信息失效，请重新登录')
         router.replace('/login')
         localStorage.removeItem('token')
-        return false;
+        return false
       }
       //弹出错误信息
       Message.error(error.response.data.message ?? '服务器出错')
-     
     }
     return Promise.reject(error.response.data)
   }

@@ -33,6 +33,13 @@
       </el-table-column>
       <el-table-column prop="insPhone" label="手机" width="120">
       </el-table-column>
+      <el-table-column prop="busBegdate" label="保单" width="120" align="center">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="点击查看图片" placement="right">
+            <el-button @click="seeProRoute(scope.row.policyRoute)" icon="el-icon-picture" circle></el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <!-- <el-table-column prop="busBegdate" label="商保开始日期" width="120">
         <template slot-scope="scope">
           {{ scope.row.busBegdate | formatDate }}
@@ -80,12 +87,13 @@
     <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1">
     </el-pagination>
     <update-insurance :isShow="isShow" :datas="selectData" :update="update" :type="type"></update-insurance>
+    <SeeImg ref="imgRef" :imgBase64="imgBase64"></SeeImg>
   </div>
 </template>
 
 <script>
-import { insurance } from "@/api";
-
+import { insurance, uploadImg } from "@/api";
+import SeeImg from '@/components/SeeImg'
 import UpdateInsurance from "@/views/Cart/update/UpdateInsurance.vue";
 
 export default {
@@ -100,6 +108,7 @@ export default {
       multipleSelection: [],
       selectDelete: [], //单条删除
       type: "",
+      imgBase64: '',
       json_fields: {
         保单编码: "insuranceId",
         车架号: "vin",
@@ -121,12 +130,29 @@ export default {
   },
   components: {
     UpdateInsurance,
-
+    SeeImg
   },
   created() {
     this.getData();
   },
   methods: {
+    seeProRoute(imgUrl) {
+
+      console.log(imgUrl)
+      if (!imgUrl) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: imgUrl }).then(res => {
+          let img = res.data;
+          this.imgBase64 = img;
+          console.log(img)
+          this.$refs.imgRef.dialogVisible = true;
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+
+    },
     getData() {
       this.$axios
         .post(insurance.query, { vin: this.searchValue })

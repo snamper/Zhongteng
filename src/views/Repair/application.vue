@@ -3,8 +3,8 @@
 
     <template v-for="(item,index) in template">
       <el-tab-pane :label="item.title" :key="index" v-if="item.show">
-        <!-- <Apply v-if="selectTab==index" /> -->
-        <component :is="item.component"></component>
+
+        <component :is="item.component" v-if="index==selectTab"></component>
       </el-tab-pane>
     </template>
 
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     changeIndex(option, value) {
-      console.log(option.index)
+
       this.selectTab = option.index;
     },
   }

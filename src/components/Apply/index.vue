@@ -11,8 +11,7 @@
       </el-row>
       <el-button type="primary" @click="addCart">增加</el-button>
     </div>
-    <el-table :data="cartList" style="width: 100%" height="700" 
-    @row-click="hoverHandle" ref="refTable" :expand-row-keys="expands" :row-key="getRowKeys">
+    <el-table :data="cartList" style="width: 100%" height="700" @row-click="hoverHandle" ref="refTable" :expand-row-keys="expands" :row-key="getRowKeys">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -40,15 +39,17 @@
             </el-form-item>
 
             <el-form-item label="故障图片">
-              <el-button type="text" label="事故图片" @click="openlist">{{
-                props.row.troublePic
-              }}</el-button>
+
+              <el-tooltip class="item" effect="dark" content="点击查看图片" placement="top">
+                <el-button @click="seeProRoute(props.row.picRoute)" icon="el-icon-picture" circle></el-button>
+              </el-tooltip>
+
             </el-form-item>
 
             <el-form-item label="费用预估单">
-              <el-button type="text" label="事故图片" @click="openlist">{{
-                props.row.workHours
-              }}</el-button>
+              <el-tooltip class="item" effect="dark" content="点击查看图片" placement="top">
+                <el-button @click="seeProRoute(props.row.listRoute)" icon="el-icon-picture" circle></el-button>
+              </el-tooltip>
             </el-form-item>
 
             <el-form-item label="预估费用">
@@ -92,14 +93,16 @@
     <!-- 查看审核状态 -->
     <ClickSatus :statusData="statusData" :steepVisible="steepVisible" ref="statusRef"></ClickSatus>
     <UpdateApplication :isShow="isShow" :datas="selectData" :update="update" :type="type"></UpdateApplication>
+    <SeeImg ref="imgRef" :imgBase64="imgBase64"></SeeImg>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { applyInfo } from "@/api";
+import { applyInfo, uploadImg } from "@/api";
 import UpdateApplication from "@/views/Repair/update/UpdateApplication";
 import ClickSatus from "@/components/ClickSatus";
+import SeeImg from '@/components/SeeImg'
 export default {
   props: {
     datas: {
@@ -119,7 +122,7 @@ export default {
       getRowKeys(row) {
         return row.applicationId;
       },
-
+      imgBase64: '',
 
     };
   },
@@ -134,13 +137,31 @@ export default {
 
   components: {
     UpdateApplication,
-    ClickSatus
+    ClickSatus,
+    SeeImg
   },
   created() {
     this.getData();
   },
 
   methods: {
+    seeProRoute(imgUrl) {
+
+
+      if (!imgUrl) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: imgUrl }).then(res => {
+          let img = res.data;
+          this.imgBase64 = img;
+          console.log(img)
+          this.$refs.imgRef.dialogVisible = true;
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+
+    },
     hoverHandle(row, column, cell, event) {
       // this.$refs.refTable.toggleRowExpansion(row);
       // console.log(row, column, cell, event)
@@ -249,6 +270,7 @@ export default {
     addCart() {
       this.selectData = {};
       this.isShow = true;
+      this.type = '新增'
     },
     seeStatus(row) {
       this.steepVisible = true;

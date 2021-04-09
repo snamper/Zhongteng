@@ -4,7 +4,7 @@
     <template v-for="(item,index) in template">
       <el-tab-pane :label="item.title" :key="index" v-if="item.show">
         <!-- <Receipt v-if="selectTab==index" /> -->
-        <component :is="item.component"></component>
+        <component :is="item.component" v-if="index==selectTab"></component>
       </el-tab-pane>
     </template>
 
@@ -55,7 +55,7 @@ export default {
     this.template.forEach(item => {
       if (this.showArr.includes(item.title)) {
         item.show = true;
-      } else if (item.title.includes(this.department)|| this.department === '系统管理员') {
+      } else if (item.title.includes(this.department) || this.department === '系统管理员') {
         item.show = true;
       } else {
         item.show = false;
