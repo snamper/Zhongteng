@@ -66,22 +66,22 @@ export const applyInfo = {
 export const repairApi = {
   neiqin: {
     query: '/api/v1/repair/queryApplicationList1',
-    update: '/api/v1/repair/addOrUpdateApplication',
+    update: '/api/v1/repair/updateApplicationStatusOne',
   },
   //申请信息主管审核
   director: {
     query: '/api/v1/repair/queryApplicationList2',
-    update: '/api/v1/repair/addOrUpdateApplication',
+    update: '/api/v1/repair/updateApplicationStatusTwo',
   },
   //申请信息总经理审核
   manager: {
     query: '/api/v1/repair/queryApplicationList3',
-    update: '/api/v1/repair/addOrUpdateApplication',
+    update: '/api/v1/repair/updateApplicationStatusThree',
   },
   //申请信息财务审核
   finance: {
     query: '/api/v1/repair/queryApplicationList4',
-    update: '/api/v1/repair/addOrUpdateApplication',
+    update: '/api/v1/repair/updateApplicationStatusFour',
   },
   //申请通过信息
   success: {
@@ -91,7 +91,10 @@ export const repairApi = {
     query: '/api/v1/repair/queryApplicationfailList',
   },
 }
-
+//维修汇总
+export const repairCount = {
+  query: '/api/v1/repair/queryReceiptByParam',
+}
 //回执信息
 export const receipt = {
   query: '/api/v1/repair/queryReceiptList',

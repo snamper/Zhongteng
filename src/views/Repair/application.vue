@@ -4,7 +4,7 @@
     <template v-for="(item,index) in template">
       <el-tab-pane :label="item.title" :key="index" v-if="item.show">
 
-        <component :is="item.component" v-if="index==selectTab"></component>
+        <component :is="current" v-if="index==selectTab" :typeApi="typeApi"></component>
       </el-tab-pane>
     </template>
 
@@ -16,17 +16,12 @@
 
 
 import Apply from '@/components/Apply'
-import ApplyOne from '@/components/ApplyOne'
-import ApplyTwo from '@/components/ApplyTwo'
-import ApplyThree from '@/components/ApplyThree'
-import ApplyFour from '@/components/ApplyFour'
-import ApplyReject from '@/components/ApplyReject'
-import ApplySuccess from '@/components/ApplySuccess'
+
+import ApplyComm from '@/components/ApplyComm';
 import { mapGetters } from "vuex";
 export default {
   components: {
     Apply,
-
   },
   computed: {
     ...mapGetters(["user_info"]),
@@ -36,15 +31,25 @@ export default {
       selectTab: '0',
       department: null,
       template: [
-        { title: '申请信息', component: Apply, show: true },
-        { title: '内勤审核', component: ApplyOne, show: false },
-        { title: '主管审核', component: ApplyTwo, show: false },
-        { title: '总经理审核', component: ApplyThree, show: false },
-        { title: '财务审核', component: ApplyFour, show: false },
-        { title: '通过', component: ApplySuccess, show: true },
-        { title: '失败', component: ApplyReject, show: true },
+        { title: '申请信息', show: true },
+        { title: '内勤审核', show: false },
+        { title: '主管审核', show: false },
+        { title: '总经理审核', show: false },
+        { title: '财务审核', show: false },
+        { title: '通过', show: true },
+        { title: '失败', show: true },
       ],
-      showArr: ['申请信息', '通过', '失败',]
+      showArr: ['申请信息', '通过', '失败',],
+      current: Apply,
+      typeApi: '',
+      currentTypeApi: [
+        'neiqin',
+        'director',
+        'manager',
+        'finance',
+        'success',
+        'fail'
+      ],
     };
   },
 
@@ -64,6 +69,16 @@ export default {
   },
   methods: {
     changeIndex(option, value) {
+      let index = option.index;
+
+      if (index == 0) {
+        this.current = Apply
+      } else {
+        this.current = ApplyComm
+        this.typeApi = this.currentTypeApi[index - 1]
+        console.log(this.typeApi);
+      }
+
 
       this.selectTab = option.index;
     },

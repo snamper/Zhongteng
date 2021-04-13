@@ -10,7 +10,15 @@
         </el-col>
       </el-row>
     </div>
-    <el-table :data="cartList" style="width: 100%" height="700" @row-click="hoverHandle" ref="refTable" :expand-row-keys="expands" :row-key="getRowKeys">
+    <el-table
+      :data="cartList"
+      style="width: 100%"
+      height="700"
+      @row-click="hoverHandle"
+      ref="refTable"
+      :expand-row-keys="expands"
+      :row-key="getRowKeys"
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -31,25 +39,29 @@
               <span>{{ props.row.appPayment }}</span>
             </el-form-item>
 
-         
             <el-form-item label="旧配件">
               <el-button type="text" label="旧配件" @click="openlist">{{
                 props.row.oldPart1
               }}</el-button>
             </el-form-item>
 
-   
             <el-form-item label="问题描述">
               <span>{{ props.row.remarks }}</span>
             </el-form-item>
 
             <el-form-item label="审核状态">
-              <el-button size="mini" round @click.stop="seeStatus(props.row)">查看审核状态</el-button>
+              <el-button size="mini" round @click.stop="seeStatus(props.row)"
+                >查看审核状态</el-button
+              >
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="回执单号" prop="receiptId" width="100"></el-table-column>
+      <el-table-column
+        label="回执单号"
+        prop="receiptId"
+        width="100"
+      ></el-table-column>
       <el-table-column label="上传日期" prop="operatorDate">
         <template slot-scope="scope">{{
           scope.row.operatorDate | formatDate(true)
@@ -63,23 +75,41 @@
 
       <el-table-column label="操作" fixed="right" width="200">
         <template slot-scope="scope">
-          <el-button size="mini" type="success" slot="reference" @click="handleEdit(scope.$index, scope.row)" v-if="hiddens">审核</el-button>
+          <el-button
+            size="mini"
+            type="success"
+            slot="reference"
+            @click="handleEdit(scope.$index, scope.row)"
+            v-if="hiddens"
+            >审核</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1"></el-pagination>
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page.sync="page"
+      :page-size="pageSize"
+      layout="total, prev, pager, next"
+      :total="totalArr.length - 1"
+    ></el-pagination>
     <ReceiptExamine :isShow="isShow" @success="success"></ReceiptExamine>
     <!-- 查看审核状态 -->
-    <ClickSatus :statusData="statusData" :steepVisible="steepVisible" ref="statusRef"></ClickSatus>
+    <ClickSatus
+      :statusData="statusData"
+      :steepVisible="steepVisible"
+      ref="statusRef"
+    ></ClickSatus>
   </div>
 </template>
 
 
 <script>
 import { mapGetters } from "vuex";
-import { repairApi } from '@/api'
+import { receipt } from "@/api";
+import ReceiptExamine from "@/views/Repair/update/ReceiptExamine.vue";
 import ClickSatus from "@/components/ClickSatus";
-import { hiddenBtn, status } from '@/config'
+import { hiddenBtn, status } from "@/config";
 import _ from "lodash";
 export default {
   props: {
@@ -101,14 +131,14 @@ export default {
       statusData: false,
       expands: [],
       getRowKeys(row) {
-        return row.applicationId;
+        return row.receiptId;
       },
       steepVisible: false,
     };
   },
 
   components: {
-
+    ReceiptExamine,
     ClickSatus,
   },
 
@@ -116,36 +146,33 @@ export default {
     ...mapGetters(["user_info"]),
     hiddens() {
       let tem = hiddenBtn.includes(this.typeApi);
-      return tem ? false : true
+      return tem ? false : true;
     },
   },
 
   created() {
     this.getData();
-
   },
   methods: {
     hoverHandle(row, column, cell, event) {
-      if (this.expands.includes(row.applicationId)) {
-        this.expands = this.expands.filter((val) => val !== row.applicationId);
+      if (this.expands.includes(row.receiptId)) {
+        this.expands = this.expands.filter((val) => val !== row.receiptId);
       } else {
         if (this.expands.length != 0) {
           this.expands.splice(0, this.expands.length);
 
-          this.expands.push(row.applicationId);
+          this.expands.push(row.receiptId);
         } else {
-          this.expands.push(row.applicationId);
+          this.expands.push(row.receiptId);
         }
       }
     },
 
-
     getData() {
-
-      let query = repairApi[this.typeApi].query
-      console.log(this.typeApi)
+      let query = receipt.query;
+      console.log(query);
       this.$axios
-        .post(query, {
+        .post(receipt.query, {
           vin: this.searchValue,
           userId: this.user_info.user_id,
         })
@@ -154,27 +181,26 @@ export default {
           if (data.errCode == 200) {
             this.cartList = this.paging(this.page, this.pageSize, data.data);
             this.totalArr = data.data;
-
           } else {
             this.$message(data.msg);
           }
         });
     },
     handleEdit(index, row) {
-      console.log(row)
+      console.log(row);
       this.isShow = true;
       this.selectData = row;
     },
+    
     async success(text, types) {
+      let addOrUpdate = receipt.addOrUpdate;
 
-      let update = repairApi[this.typeApi].update;
-
-      const { applicationId } = this.selectData;
+      const { receiptId } = this.selectData;
       this.isShow = false;
 
       if (types === "通过") {
-        let result = await this.$axios.post(update, {
-          applicationId,
+        let result = await this.$axios.post(addOrUpdate, {
+          receiptId,
           examStatus1: status[types],
         });
         if (result.data.errCode === 200) {
@@ -184,8 +210,8 @@ export default {
           this.$message.error(result.data.msg);
         }
       } else if (types === "不通过") {
-        let result = await this.$axios.post(update, {
-          applicationId,
+        let result = await this.$axios.post(addOrUpdate, {
+          receiptId,
           examStatus1: status[types],
           examDevice1: text,
         });
@@ -201,12 +227,11 @@ export default {
     //查询内容
     queryClick() {
       this.getDate();
-
     },
     seeStatus(row) {
       this.steepVisible = true;
 
-      this.statusData = row
+      this.statusData = row;
     },
   },
 };

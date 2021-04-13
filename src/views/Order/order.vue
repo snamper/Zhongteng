@@ -28,7 +28,15 @@
       </el-table-column>
       <el-table-column prop="qty" label="订单数量" width="120">
       </el-table-column>
-      <el-table-column prop="empName1" label="负责人一" width="120">
+      <el-table-column prop="empName1" label="负责人" width="120">
+      </el-table-column>
+
+       <el-table-column prop="orderPic" label="订单信息" width="120" align="center">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="点击查看图片" placement="right">
+            <el-button @click="seePicRoute(scope.row.picRoute)" icon="el-icon-picture" circle></el-button>
+          </el-tooltip>
+        </template>
       </el-table-column>
       
       <el-table-column prop="operator" label="操作人" width="90">
@@ -51,12 +59,14 @@
     <el-pagination @current-change="handleCurrentChange" :current-page.sync="page" :page-size="pageSize" layout="total, prev, pager, next" :total="totalArr.length - 1">
     </el-pagination>
     <update-order :isShow="isShow" :datas="selectData" :update="update" :type="type"></update-order>
+    <SeeImg ref="imgRef" :imgBase64="imgBase64"></SeeImg>
   </div>
 </template>
 
 <script>
-import { order } from "@/api";
+import { order,uploadImg } from "@/api";
 import UpdateOrder from "./update/UpdateOrder";
+import SeeImg from '@/components/SeeImg'
 
 export default {
   data() {
@@ -70,6 +80,7 @@ export default {
       multipleSelection: [],
       selectDelete: [], //单条删除
       type: "",
+      imgBase64: '',
       json_fields: {
         订单编码: "orderId",
         客户编码: "customerId",
@@ -81,6 +92,7 @@ export default {
         车型编码: "typeId",
         车型名称: "carName",
         订单数量: "qty",
+        订单信息: "picRoute",
         操作人: "operator",
         操作时间: "operatorDate",
       },
@@ -88,11 +100,29 @@ export default {
   },
   components: {
     UpdateOrder,
+    SeeImg
   },
   created() {
     this.getData();
   },
   methods: {
+    seePicRoute(imgUrl) {
+
+      console.log(imgUrl)
+      if (!imgUrl) {
+        this.$message.error('暂无上传图片')
+      } else {
+        this.$axios.post(uploadImg.download, { fileName: imgUrl }).then(res => {
+          let img = res.data;
+          this.imgBase64 = img;
+          console.log(img)
+          this.$refs.imgRef.dialogVisible = true;
+        }).catch(e => {
+          this.$message.error(e)
+        })
+      }
+    },
+
     getData() {
       this.$axios.post(order.query, { vin: this.searchValue }).then((res) => {
         const data = res.data;

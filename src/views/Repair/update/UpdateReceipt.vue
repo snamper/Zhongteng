@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="type" :visible.sync="isShow">
+  <el-dialog :title="type" :visible.sync="isShow" @close="handleClose">
     <el-form :model="datas" ref="ruleForm" :rules="rules">
       <el-row>
 
@@ -133,6 +133,9 @@ export default {
     },
   },
   methods: {
+    handleClose() {
+      this.$parent.isShow = false;
+    },
     uploadHandle(result) {
       if (result instanceof Array) {
         let imgUrl = result[0].data;

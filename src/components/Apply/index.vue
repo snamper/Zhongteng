@@ -12,9 +12,10 @@
       <el-button type="primary" @click="addCart">增加</el-button>
     </div>
     <el-table :data="cartList" style="width: 100%" height="700" @row-click="hoverHandle" ref="refTable" :expand-row-keys="expands" :row-key="getRowKeys">
-      <el-table-column type="expand">
+      <el-table-column type="expand" >
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
+    
             <el-form-item label="申请单号">
               <span>{{ props.row.applicationId }}</span>
             </el-form-item>

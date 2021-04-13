@@ -7,11 +7,28 @@
             <el-input :disabled="true" v-model="datas.applicationId"></el-input>
           </el-form-item>
         </el-col>
+<!-- 
         <el-col :span="12">
           <el-form-item label="车架号" prop="vin" :label-width="formLabelWidth">
             <el-input v-model="datas.vin" :disabled="false"></el-input>
           </el-form-item>
-        </el-col>
+        </el-col> -->
+
+        <el-col :span="12">
+              <el-form-item label="车架号" :label-width="formLabelWidth">
+                <el-select v-model="datas.vin"   filterable placeholder="请选择">
+                  <el-option
+                   @click="getIndex(item,index)"
+                    v-for="(item,index) in cartFullinfo"
+                    :key="item.value"
+                    :label="item.vin"
+                    :value="item.vin"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
         <el-col :span="12">
           <el-form-item label="维修类别" prop="category" :label-width="formLabelWidth">
             <el-select v-model="datas.category" placeholder="请选择维修类别">
@@ -21,12 +38,27 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item label="客户名称" :label-width="formLabelWidth" prop="ctName">
             <el-input v-model="datas.ctName"></el-input>
           </el-form-item>
-        </el-col>
+        </el-col> -->
 
+        <el-col :span="12">
+              <el-form-item label="客户名称" :label-width="formLabelWidth">
+                <el-select v-model="datas.ctName"   filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in customerList"
+                    :key="item.value"
+                    :label="item.ctName"
+                    :value="item.ctName"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+     
         <el-col :span="12">
           <el-form-item :label-width="formLabelWidth" label="服务站">
             <el-select v-model="datas.cName" filterable placeholder="请选择">
@@ -88,7 +120,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { applyInfo, services, uploadImg } from "@/api";
+import { applyInfo, services, uploadImg,totalApi,customer } from "@/api";
 import ImageUpload from "@/components/ImageUpload";
 export default {
   props: {
@@ -115,6 +147,9 @@ export default {
   },
   data() {
     return {
+      index:[],
+      customerList:[],
+      cartFullinfo: [],
       cartServices: [],
       rules: {
         ctName: [
@@ -139,6 +174,8 @@ export default {
 
   created() {
     this.getDataServices();
+    this.getDataCartFullinfo();
+    this.getCustomer();
     console.log(this.user_info.user_id);
   },
   watch: {
@@ -161,6 +198,40 @@ export default {
   },
 
   methods: {
+    getIndex(item,index){
+		console.log(item,index)
+		//这里的item是点击获取当前值的每一项内容
+		//这里的index是点击获取当前值的下标
+	},
+    getCustomer() {
+      const { page, pageSize, selectOptions } = this;
+      this.$axios
+        .post(customer.queryCustomerList, {
+          ctName: this.ctName,
+        })
+        .then((res) => {
+          console.log(res);
+          const data = res.data;
+          if (data.errCode == 200) {
+            this.customerList = this.paging(page, pageSize, data.data);
+            this.totalArr = data.data;
+            this.type = "";
+          } else {
+            this.$message(data.msg);
+          }
+        });
+    },
+    getDataCartFullinfo() {
+      this.$axios.post(totalApi.query, { vin: this.searchValue }).then((res) => {
+        const data = res.data;
+        if (data.errCode == 200) {
+          this.cartFullinfo = this.paging(this.page, this.pageSize, data.data);
+          this.totalArr = data.data;
+          this.type = "";
+        } else {
+          this.$message(data.msg);
+        }
+      });},
     uploadHandle1(result) {
       if (result instanceof Array) {
         let imgUrl = result[0].data;

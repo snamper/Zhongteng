@@ -29,10 +29,7 @@
       </el-table-column>
       <el-table-column prop="insuranceCp" label="保险公司" width="100">
       </el-table-column>
-      <el-table-column prop="insPerson" label="联系人" width="90">
-      </el-table-column>
-      <el-table-column prop="insPhone" label="手机" width="120">
-      </el-table-column>
+    
       <el-table-column prop="busBegdate" label="保单" width="120" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="点击查看图片" placement="right">
@@ -40,6 +37,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
+      
       <!-- <el-table-column prop="busBegdate" label="商保开始日期" width="120">
         <template slot-scope="scope">
           {{ scope.row.busBegdate | formatDate }}

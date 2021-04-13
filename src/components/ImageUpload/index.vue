@@ -2,7 +2,15 @@
 
   <div>
     <div>
-      <el-upload list-type="picture-card" multiple :limit="1" before-upload="beforeAvatarUpload" :on-preview="handlePictureCardPreview" :on-change="fileChange" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false" :headers="imgHeaders">
+      <el-upload list-type="picture-card" multiple 
+      :limit="1" 
+      before-upload="beforeAvatarUpload" 
+      :on-preview="handlePictureCardPreview" 
+      :on-change="fileChange" 
+      :on-remove="handleRemove" 
+      :file-list="fileList" 
+      :auto-upload="false" 
+      :headers="imgHeaders">
         <i class="el-icon-plus"></i>
       </el-upload>
       <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
@@ -13,7 +21,7 @@
     </el-dialog>
   </div>
 </template>
-
+ 
 <script>
 export default {
   props: {
@@ -55,6 +63,9 @@ export default {
       if (isJPG && isLt2M) {
         this.fileList = fileList;
       }
+
+
+
     },
     fileRemove(file, fileList) {
       this.fileList = fileList;
@@ -71,17 +82,17 @@ export default {
       this.dialogVisible = true;
     },
     submitUpload() {
-
+      
       const promiseLisr = [];
       if (this.fileList.length <= 0) {
         this.$message.warning('请上传图片')
         return false;
       }
-      console.log(this.fileList.length);
+    
       let datas = new FormData();
-
+     
       this.fileList.forEach(async file => {
-        datas.append('files', file.raw)
+        datas.append('files', file.raw)      
         const data = this.$axios.post(this.url, datas, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -94,7 +105,7 @@ export default {
       }).catch(e => {
         this.$emit('uploadHandle', e)
       })
-
+      
     },
 
   },

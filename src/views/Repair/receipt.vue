@@ -3,8 +3,8 @@
 
     <template v-for="(item,index) in template">
       <el-tab-pane :label="item.title" :key="index" v-if="item.show">
-        <!-- <Receipt v-if="selectTab==index" /> -->
-        <component :is="item.component" v-if="index==selectTab"></component>
+
+        <component :is="current" v-if="index==selectTab" :typeApi="typeApi"></component>
       </el-tab-pane>
     </template>
 
@@ -14,14 +14,9 @@
 
 <script>
 
-
+// 回执审核主文件-----------------------------------------------------------------------------------
 import Receipt from '@/components/Receipt'
-import ReceiptOne from '@/components/ReceiptOne'
-import ReceiptTwo from '@/components/ReceiptTwo'
-import ReceiptThree from '@/components/ReceiptThree'
-import ReceiptFour from '@/components/ReceiptFour'
-import ReceiptReject from '@/components/ReceiptReject'
-import ReceiptSuccess from '@/components/ReceiptSuccess'
+import ReceiptComm from '@/components/ReceiptComm';
 import { mapGetters } from "vuex";
 export default {
   components: {
@@ -36,15 +31,25 @@ export default {
       selectTab: '0',
       department: null,
       template: [
-        { title: '申请信息', component: Receipt, show: true },
-        { title: '内勤审核', component: ReceiptOne, show: false },
-        { title: '主管审核', component: ReceiptTwo, show: false },
-        { title: '总经理审核', component: ReceiptThree, show: false },
-        { title: '财务审核', component: ReceiptFour, show: false },
-        { title: '通过', component: ReceiptSuccess, show: true },
-        { title: '失败', component: ReceiptReject, show: true },
+        { title: '回执信息', show: true },
+        { title: '内勤审核', show: false },
+        { title: '主管审核', show: false },
+        { title: '总经理审核', show: false },
+        { title: '财务审核', show: false },
+        { title: '通过', show: true },
+        { title: '失败', show: true },
       ],
-      showArr: ['申请信息', '通过', '失败']
+      showArr: ['申请信息', '通过', '失败'],
+      current: Receipt,
+      typeApi: '',
+      currentTypeApi: [
+        'neiqin',
+        'director',
+        'manager',
+        'finance',
+        'success',
+        'fail'
+      ],
     };
   },
 
@@ -64,7 +69,17 @@ export default {
   },
   methods: {
     changeIndex(option, value) {
-      console.log(option.index)
+      let index = option.index;
+
+      if (index == 0) {
+        this.current = Receipt
+      } else {
+        this.current = ReceiptComm
+        this.typeApi = this.currentTypeApi[index - 1]
+
+      }
+
+
       this.selectTab = option.index;
     },
   }

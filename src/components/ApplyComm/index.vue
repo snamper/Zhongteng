@@ -95,17 +95,16 @@ import { mapGetters } from "vuex";
 import { repairApi } from '@/api'
 import ApplyExamine from "@/views/Repair/update/ApplyExamine.vue";
 import ClickSatus from "@/components/ClickSatus";
-import { hiddenBtn, status } from '@/config'
+import { hiddenBtn, status, sendFiled } from '@/config'
 import _ from "lodash";
 export default {
   props: {
-    datas: {
-      type: Object,
-    },
+
     typeApi: {
       type: String,
       required: true,
     },
+
   },
 
   data() {
@@ -157,7 +156,7 @@ export default {
 
 
     getData() {
-
+      console.log(this.typeApi);
       let query = repairApi[this.typeApi].query
       console.log(this.typeApi)
       this.$axios
@@ -177,7 +176,7 @@ export default {
         });
     },
     handleEdit(index, row) {
-      console.log(row)
+
       this.isShow = true;
       this.selectData = row;
     },
@@ -189,9 +188,12 @@ export default {
       this.isShow = false;
 
       if (types === "通过") {
+        let params = sendFiled[this.typeApi]('1');
+
+
         let result = await this.$axios.post(update, {
           applicationId,
-          examStatus1: status[types],
+          ...params,
         });
         if (result.data.errCode === 200) {
           this.$message.success(result.data.msg);
@@ -200,10 +202,11 @@ export default {
           this.$message.error(result.data.msg);
         }
       } else if (types === "不通过") {
+        let params = sendFiled[this.typeApi]('0', text);
+
         let result = await this.$axios.post(update, {
           applicationId,
-          examStatus1: status[types],
-          examDevice1: text,
+          ...params,
         });
         if (result.data.errCode === 200) {
           this.$message.success(result.data.msg);

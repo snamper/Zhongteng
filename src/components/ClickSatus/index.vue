@@ -44,15 +44,15 @@ export default {
 
 
       if (failCode.includes(examStatus1) || failCode.includes(examStatus2) || failCode.includes(examStatus3) || failCode.includes(examStatus4)) {
-        this.statusList.push({ status: val.examStatus1, device: val.examDevice1 ?? '', type: 'wait', name: 'examStatus1', time: examDate1 ? '审核时间' + examDate1 : '' })
-        this.statusList.push({ status: val.examStatus2, device: val.examDevice2 ?? '', type: 'wait', name: 'examStatus2', time: examDate2 ? '审核时间' + examDate2 : '' })
-        this.statusList.push({ status: val.examStatus3, device: val.examDevice3 ?? '', type: 'wait', name: 'examStatus3', time: examDate3 ? '审核时间' + examDate3 : '' })
-        this.statusList.push({ status: val.examStatus4, device: val.examDevice4 ?? '', type: 'wait', name: 'examStatus4', time: examDate4 ? '审核时间' + examDate4 : '' })
+        this.statusList.push({ status: val.examStatus1, device: val.examDevice1 ?? '', type: 'wait', name: 'examStatus1', time: examDate1 ? '审核时间:' + this.$moment(examDate1).format('YYYY-MM-DD HH:DD:ss') : '' })
+        this.statusList.push({ status: val.examStatus2, device: val.examDevice2 ?? '', type: 'wait', name: 'examStatus2', time: examDate2 ? '审核时间:' + this.$moment(examDate2).format('YYYY-MM-DD HH:DD:ss') : '' })
+        this.statusList.push({ status: val.examStatus3, device: val.examDevice3 ?? '', type: 'wait', name: 'examStatus3', time: examDate3 ? '审核时间:' + this.$moment(examDate3).format('YYYY-MM-DD HH:DD:ss') : '' })
+        this.statusList.push({ status: val.examStatus4, device: val.examDevice4 ?? '', type: 'wait', name: 'examStatus4', time: examDate4 ? '审核时间:' + this.$moment(examDate4).format('YYYY-MM-DD HH:DD:ss') : '' })
       } else {
-        this.statusList.push({ status: val.examStatus1, device: val.examDevice1 ?? '', type: 'wait', name: 'examStatus1', time: examDate1 ? '审核时间' + examDate1 : '' })
-        this.statusList.push({ status: val.examStatus2, device: val.examDevice2 ?? '', type: 'wait', name: 'examStatus2', time: examDate2 ? '审核时间' + examDate2 : '' })
-        this.statusList.push({ status: val.examStatus3, device: val.examDevice3 ?? '', type: 'wait', name: 'examStatus3', time: examDate3 ? '审核时间' + examDate3 : '' })
-        this.statusList.push({ status: val.examStatus4, device: val.examDevice4 ?? '', type: 'wait', name: 'examStatus4', time: examDate4 ? '审核时间' + examDate4 : '' })
+        this.statusList.push({ status: val.examStatus1, device: val.examDevice1 ?? '', type: 'wait', name: 'examStatus1', time: examDate1 ? '审核时间:' + this.$moment(examDate1).format('YYYY-MM-DD HH:DD:ss') : '' })
+        this.statusList.push({ status: val.examStatus2, device: val.examDevice2 ?? '', type: 'wait', name: 'examStatus2', time: examDate2 ? '审核时间:' + this.$moment(examDate2).format('YYYY-MM-DD HH:DD:ss') : '' })
+        this.statusList.push({ status: val.examStatus3, device: val.examDevice3 ?? '', type: 'wait', name: 'examStatus3', time: examDate3 ? '审核时间:' + this.$moment(examDate3).format('YYYY-MM-DD HH:DD:ss') : '' })
+        this.statusList.push({ status: val.examStatus4, device: val.examDevice4 ?? '', type: 'wait', name: 'examStatus4', time: examDate4 ? '审核时间:' + this.$moment(examDate4).format('YYYY-MM-DD HH:DD:ss') : '' })
       }
       this.statusList.forEach((item, index) => {
         if (item.status == 0) {

@@ -15,11 +15,11 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item prop="typeId" label="车型编码" :label-width="formLabelWidth">
             <el-input v-model="datas.typeId"></el-input>
           </el-form-item>
-        </el-col>
+        </el-col> -->
 
         <el-col :span="12">
           <el-form-item label="车型名称" prop="carName" :label-width="formLabelWidth">
@@ -32,8 +32,15 @@
             <el-input v-model="datas.qty"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
+      
 
+      <el-col :span="12">
+          <el-form-item label="订单信息" :label-width="formLabelWidth">
+            <ImageUpload :url="loadImgUrl" @uploadHandle="uploadHandle" ref="imgupload"></ImageUpload>
+          </el-form-item>
+        </el-col>
+
+     </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="$parent.isShow = false">取 消</el-button>
@@ -43,8 +50,9 @@
 </template>
 
 <script>
+import ImageUpload from "@/components/ImageUpload";
 import { mapGetters } from 'vuex'
-import { order } from '@/api'
+import { order ,uploadImg} from '@/api'
 export default {
   props: {
     isShow: {
@@ -63,7 +71,9 @@ export default {
       type: Object,
     }
   },
-
+  components: {
+    ImageUpload
+  },
   data() {
     return {
       rules: {
@@ -86,11 +96,10 @@ export default {
         empName2: [
           { required: true, message: '请输入负责人二', trigger: 'blur' }
         ],
+        loadImgUrl: uploadImg.upload,
       },
-
-      form: {
-
-      },
+      loadImgUrl: uploadImg.upload,
+      form: {},
       formLabelWidth: '120px'
     };
   },
@@ -103,17 +112,28 @@ export default {
       if (val === '编辑') {
         this.$nextTick(() => {
           this.$refs['ruleForm'].clearValidate();
-        })
+        });
       }
       if (val === '新增') {
         this.datas.operator = this.user_info.user_name;
-
-      }
+      }    
     },
-
+    isShow: function () {
+      this.$nextTick(() => {
+        this.$refs.imgupload.fileList = [];
+      })
+    }
   },
+ 
 
   methods: {
+    uploadHandle(result) {
+      if (result instanceof Array) {
+        let imgUrl = result[0].data;
+        this.datas.picRoute = imgUrl;
+        this.$message.success("图片上传成功,请点击确认后保存图片!");
+      }
+    },
     closeDialog() {
       this.$parent.isShow = false;
     },
